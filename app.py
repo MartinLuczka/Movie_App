@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
 from dbModels.Models import db
@@ -20,4 +20,16 @@ with app.app_context():
 @app.route("/")
 def home():
     return "Hello, Flask!"
+
+@app.route("/prihlaseni", methods = ["GET", "POST"])
+def prihlaseni():
+    infoMessage = ''
+    if request.method == 'POST':
+
+        if login( request.form['username'] , request.form['password'] ):
+            return render_template( 'HomePage.html', webTitle='Domovská stránka' )
+        else:
+            infoMessage = 'Wrong username or password'
+
+    return render_template( 'Login.html', webTitle='Přihlášení' , infoMessage=infoMessage)
 
