@@ -73,14 +73,21 @@ def registrace():
 @app.route("/searchBarProcess", methods = ["POST"])
 def searchBarProcess():
     val = request.json["val"]
-    # z requestu uděláme json formát a vezmeme si z něj hodnotu val (text v searchBaru)
+    # Z requestu uděláme json formát a vezmeme si z něj hodnotu val (text v searchBaru)
     films = Dbwrapper.getFilmbyPartOfTitle(val)
+    # Volání metody Dbwrapper.getFilmbyPartOfTitle pro vyhledání filmů podle části názvu
     films = Dbwrapper.rowsToDict(films)
+    # Převedení výsledků (seznamu řádků) na seznam slovníků pomocí metody rowsToDict
     return jsonify({"data": films})
+    # Vrácení výsledků ve formátu JSON s klíčem "data", obsahující seznam filmů
 
-@app.route( '/film/<filmId>' )
+@app.route('/film/<filmId>')
+# cesta daná <filmId>, pro každý film unikátní
 def filmPage(filmId):
     film = Dbwrapper.getFilmById(filmId)
+    # Získání informací o konkrétním filmu podle jeho IMDb ID
     film = Dbwrapper.rowsToDict([film])[0]
+    # Převedení výsledku na slovník, získání jednoho jediného prvku na indexu 0
     return render_template( 'film.html', film=film, usersRating=None)
+    # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatelů
 

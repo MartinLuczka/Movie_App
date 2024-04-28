@@ -28,9 +28,11 @@ $(document).ready(function(){
             data: JSON.stringify({val: searchBar.val()}),
             // data, která posíláme na server (val je hodnota v searchBaru)
             success: function(response){
-                // funkce se spustí, pokud server správně pošle zpátky zprávu
+                // funkce se spustí, pokud server správně pošle zprávu zpátky
                 console.log(response.data);
+                // Vypíše do konzole data přijatá ze serveru
                 dataToList(response.data);
+                // Zavolá funkci dataToList a předá jí data přijatá ze serveru pro další zpracování
             },
             error: function(error){
                 console.log(error);
@@ -39,18 +41,28 @@ $(document).ready(function(){
     })
     function dataToList(data){
         searchBarList.empty();
+        // Vyprázdní vyhledávací panel
     for (i = 0; i < data.length; i++) {
+        // Pro každou položku v poli `data` provede následující operace
         let film = data[i]
+        // Uloží aktuální z pole `data` do proměnné `film`
 
         let li = document.createElement('li');
+        // Vytvoří nový element <li> (položka seznamu)
         let a = document.createElement('a');
+        // Vytvoří nový element <a> (odkaz)
 
         a.textContent = film['title'];
+        // Nastaví text odkazu <a> na hodnotu atributu 'title' z aktuálního objektu `film`
         a.setAttribute('href', '/film/' + film['imdbId']);
+        // Nastaví atribut `href` odkazu na cílovou URL filmu pomocí ID filmu
         li.appendChild(a);
+        // Přidá vytvořený odkaz <a> do položky seznamu <li>
 
         searchBarList.append(li)
+        // Přidá vytvořenou položku seznamu <li> do seznamu `searchBarList`
         searchBarList.show();
+        // Zobrazí seznam `searchBarList`
     }
 }
 });
