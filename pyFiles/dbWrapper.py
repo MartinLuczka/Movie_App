@@ -19,3 +19,9 @@ class Dbwrapper:
         if rows is None:
             return []
         return [row._asdict() for row in rows]
+
+    @staticmethod
+    def getFilmById(id):
+        query = text( 'SELECT * FROM films WHERE imdbId = :imdbId' )
+        params = {"imdbId": id}
+        return db.session.execute( query, params ).fetchone()

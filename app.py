@@ -78,3 +78,9 @@ def searchBarProcess():
     films = Dbwrapper.rowsToDict(films)
     return jsonify({"data": films})
 
+@app.route( '/film/<filmId>' )
+def filmPage(filmId):
+    film = Dbwrapper.getFilmById(filmId)
+    film = Dbwrapper.rowsToDict([film])[0]
+    return render_template( 'film.html', film=film, usersRating=None)
+
