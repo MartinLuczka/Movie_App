@@ -5,7 +5,29 @@
 {#vložení obsahu dané stránky#}
 <main>
 
-{{ film }}
+<h1>Název filmu: {{ film["title"] }}</h1>
+
+<h2>Rok vydání: {{ film["year"] }}</h2>
+
+<h2>Hodnocení na IMBd: {{ film["rating"] }}</h2>
+
+<h3>Režisér filmu: {{ film["director"]["name"] }}</h3>
+
+<h3>Herci ve filmu:</h3>
+
+<h3>Popis filmu: {{ film["description"] }}</h3>
+
+<h2>Plakát k filmu:</h2>
+
+<img src="{{ film["posterImgSrc"] }}" alt="Plakát filmu {{ film["title"] }}" width="300">
+
+    <br>
+
+<h2>Trailer k filmu:</h2>
+
+<video width="640" height="360" controls>
+        <source src="{{ film["trailerUrl"] }}" type="video/mp4">
+</video>
 
 </main>
 
