@@ -1,0 +1,31 @@
+{# Import částí, které se budou opakovat na více stránkách#}
+{% include 'reusable/header.html' %}
+{% include 'reusable/nav.html' %}
+{#vložení obsahu dané stránky#}
+<main>
+
+
+{# Vytvoření formuláře, post - posíláme zadaná data na URL adresu #}
+<form action="" method="post">
+
+        <label for="username">Přihlašovací jméno</label>
+        <input type="text" name="username" id="username" required>
+
+        <label for="password">Heslo</label>
+        <input type="password" name="password" id="password" required> {# required - uživatel nemůže formulář poslat prázdný#}
+        {# Password - typ inputy, heslo je schované za "hvězdičkama", automaticky ukázání#}
+
+        <label for="password_confirm">Heslo zadejte znovu!</label>
+        <input type="password" name="password_confirm" id="password_confirm" required>
+
+        <input type="submit" value="Zaregistrovat se"> {# Submit - pošli formulář, value - text na tlačítku #}
+
+    </form>
+
+<p>{{ infoMessage }}</p>
+
+</main>
+
+{% include 'reusable/footer.html' %}
+
+

@@ -50,3 +50,8 @@ def odhlaseni():
     redirect("/")
     # po odhlášení přesměrování na domovskou stránku
 
+@app.route("/registrace", methods = ["GET", "POST"])
+# stránka pro registraci
+def registrace():
+
+
