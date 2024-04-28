@@ -1,10 +1,9 @@
-from crypt import methods
-
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 from dbModels.Models import db
 from pyFiles.UserController import login, signup
+from pyFiles.dbWrapper import Dbwrapper
 
 # používané importy
 
@@ -75,4 +74,7 @@ def registrace():
 def searchBarProcess():
     val = request.json["val"]
     # z requestu uděláme json formát a vezmeme si z něj hodnotu val (text v searchBaru)
+    films = Dbwrapper.getFilmbyPartOfTitle(val)
+    films = Dbwrapper.rowsToDict(films)
+    return jsonify({"data": films})
 
