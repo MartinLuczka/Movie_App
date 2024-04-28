@@ -32,7 +32,7 @@ def prihlaseni():
     infoMessage = ''
     if request.method == 'POST':
     # Uživatel vyplnit formulář pro přihlášení
-        if login(request.form['username'] , request.form['password']):
+        if login(request.form['username'], request.form['password']):
             return render_template('HomePage.html', webTitle='Domovská stránka')
         # Přihlášení se podařilo, uživatel se dostane na domovskou stránku
         else:
