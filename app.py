@@ -1,3 +1,5 @@
+from crypt import methods
+
 from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 
@@ -68,4 +70,9 @@ def registrace():
             # pokud signup_result bude error, tak se přepíše do infoMessage
             infoMessage = signup_result
     return render_template("SignUp.html", webTitle = "Registrace", infoMessage = infoMessage)
+
+@app.route("/searchBarProcess", methods = ["POST"])
+def searchBarProcess():
+    val = request.json["val"]
+    # z requestu uděláme json formát a vezmeme si z něj hodnotu val (text v searchBaru)
 

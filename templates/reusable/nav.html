@@ -1,0 +1,15 @@
+<nav>
+    <ul>
+        <li><a href="/"></a>Domovská stránka</li>
+        <li>
+            {% if session["user"] %}
+                <a href="/user/{{ session["user"]["id"]}}">{{ session["user"]["username"] }}</a>
+                <br> <a href="/odhlaseni">Odhlásit se</a>
+                {# br dělá nový řádek #}
+            {% else %}
+                <a href="/prihlaseni">Přihlásit se</a>
+                <a href="/registrace">Zaregistrovat se</a>
+            {% endif %}
+        </li>
+    </ul>
+</nav>
