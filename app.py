@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 from dbModels.Models import db
@@ -36,9 +36,17 @@ def prihlaseni():
             return render_template('HomePage.html', webTitle='Domovská stránka')
         # Přihlášení se podařilo, uživatel se dostane na domovskou stránku
         else:
-            infoMessage = 'Wrong username or password'
+            infoMessage = 'Chybné heslo nebo přihlašovací jméno'
         # Přihlášení se nezdaří, informuje me ho o špatně zadaných údajích
 
     return render_template('Login.html', webTitle='Přihlášení' , infoMessage=infoMessage)
     # uživatel zůstane na stránce přihlášení, proměnnou infoMessage předáváme stránce Login.html
+
+@app.route("/odhlaseni")
+# stránka pro odlášení
+def odhlaseni():
+    session.pop("user", None)
+    # ukončení sessionu uživatele
+    redirect("/")
+    # po odhlášení přesměrování na domovskou stránku
 
