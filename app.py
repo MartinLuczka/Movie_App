@@ -86,8 +86,29 @@ def searchBarProcess():
 def filmPage(filmId):
     film = Dbwrapper.getFilmById(filmId)
     # Získání informací o konkrétním filmu podle jeho IMDb ID
-    film = Dbwrapper.rowsToDict([film])[0]
+    rating = 0
     # Převedení výsledku na slovník, získání jednoho jediného prvku na indexu 0
-    return render_template( 'film.html', film=film, usersRating=None)
-    # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatelů
+    if "user" in session:
+        rating = Dbwrapper.getRating(session["user"]["id"], filmId)
+    if film:
+        return render_template( 'film.html', film=film, usersRating=rating)
+        # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatelů
+    return render_template("film.html", errorMessage = "Film not found")
+
+@app.route('/hodnoceniFilmu', methods=['POST', 'GET'])
+def hodnoceniFilmu():
+    val = request.json
+    print(val)
+
+    if 'user' not in session:
+        return "notlogedin"
+
+    print(session['user']['id'], val['filmId'], val['rating'])
+    result = Dbwrapper.addRating( session['user']['id'], val['filmId'], val['rating'] )
+    print(result)
+    if result:
+        return "success"
+
+    return "fail"
+
 

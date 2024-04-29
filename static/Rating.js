@@ -1,22 +1,35 @@
 $(document).ready(function(){
 
-    var defaultVal = 0;
-    var hvezdy = $("#ratingDiv").children("img");
+    let defaultVal = ($("#ratingDiv").attr("defaultUserRating") === undefined) ? 0 : $("#ratingDiv").attr("defaultUserRating");
+    // pokud není myš nad kurzorem, tak svítí 0 hvězd
+    let hvezdy = $("#ratingDiv").children("img");
+    // získáme všechny hvězdy
 
-    const fullStarSrc = "imgs/full.png"
-    const emptyStarSrc = "imgs/empty.png"
+    console.log(hvezdy)
 
+    const fullStarSrc = "/static/imgs/full.png"
+    const emptyStarSrc = "/static/imgs/empty.png"
+    // cesty k obrázkům si zapíšeme do konstatních proměnných
     hvezdy.hover(function(event){
+        // když máme myš nad kteroukoliv hvězdou
         for (var i = 0; i < hvezdy.length; i++) {
-            if (event.target.getAttribute("val") >= i + 1) {
+            console.log(i)
+            // projdeme si všechny hvězdy
+            if (event.target.getAttribute("order") >= i + 1) {
+            // rozsvítíme hvězdu na kterou ukazuje a také všechny pod ní
                 hvezdy[i].src = fullStarSrc;
+                console.log(fullStarSrc)
+                // změníme, zadáme zdroj obrázku
             } else {
                 hvezdy[i].src = emptyStarSrc;
+                console.log(emptyStarSrc)
+                // ostatní nastavíme do "neaktivního" stavu
             }
         }
     });
 
     hvezdy.mouseleave(function(event){
+    // pokud nemáme kurzor nad žádnou hvězdou
         for (var i = 0; i < hvezdy.length; i++) {
             if (defaultVal >= i + 1) {
                 hvezdy[i].src = fullStarSrc;
@@ -25,13 +38,16 @@ $(document).ready(function(){
             }
         }
     });
+    // tak hvězdy nastavíme podle defaultní hodnoty, ta se změní ohodnocením uživatele, chceme, aby viděl uživatel své hodnocení
 
     hvezdy.click(function(event){
-        sendToServer(event.target.getAttribute("val"));
+        sendToServer(event.target.getAttribute("order"));
     });
+    // když kliknu na nějakou z hvězd, tak pošlu hodnotu pořadí této hvězdy
 
     function sendToServer(hvezdaVal) {
         $.ajax({
+        // tvorba requestu na server
             type: 'POST',
             url: '/hodnoceniFilmu',
             contentType: 'application/json',
@@ -42,8 +58,8 @@ $(document).ready(function(){
             success: function(data){
                 console.log(data);
                 if (data === "notlogedin") {
-                    if (confirm("Nejste prihlaseny\nChcete se prihlasit?")) {
-                        window.location.href = "/login";
+                    if (confirm("Nejste zde přihlášen!\nChcete se přihlásit?")) {
+                        window.location.href = "/prihlaseni";
                     }
                 }
                 else if (data === "success") {

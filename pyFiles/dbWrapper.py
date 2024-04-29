@@ -1,4 +1,8 @@
+from sqlite3 import IntegrityError
+
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
+
 from dbModels.Models import db
 
 
@@ -36,3 +40,51 @@ class Dbwrapper:
         # Parametry pro dotaz - IMDb ID
         return db.session.execute( query, params ).fetchone()
         # Použití fetchone() pro získání jednoho řádku odpovídajícího dotazu
+
+    @staticmethod
+    def getRating( userId, filmId ):
+        query = text(
+            'SELECT rating FROM ratings'
+            ' WHERE userId = :userId AND filmId = :filmId'
+        )
+        params = {"userId": userId, "filmId": filmId}
+        try:
+            try:
+                return db.session.execute( query, params ).fetchone()[0]
+            except TypeError as te:
+                return 0
+        except SQLAlchemyError as e:
+            return 0
+
+    @staticmethod
+    def addRating(userId, filmId, rating):
+        query = text("INSERT INTO ratings (userId, filmId, rating) VALUES (:userId, :filmId, :rating)")
+        parametres = {"userId": userId, "filmId": filmId, "rating": rating}
+        try:
+            db.session.execute(query, parametres)
+            db.session.commit()
+            print("rating added")
+        except SQLAlchemyError as e:
+            print(e.orig)
+            db.session.rollback()
+            if isinstance(e.orig, IntegrityError):
+                if Dbwrapper.changeRating(userId, filmId, rating):
+                    return True
+            print(e)
+            return False
+        return True
+
+    @staticmethod
+    def changeRating(userId, filmId, rating):
+        query = text(
+            'UPDATE ratings SET rating = :rating WHERE userId = :userId AND filmId = :filmId')
+        params = {"userId": userId, "filmId": filmId, "rating": rating}
+        try:
+            db.session.execute(query, params)
+            db.session.commit()
+            print("rating changed")
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(e)
+            return False
+        return True

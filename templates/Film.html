@@ -6,11 +6,26 @@
 
 <script src = "../static/Rating.js"></script>
 
-<main>
+{% if film %}
+
+<main filmId="{{ film['imdbId'] }}">
 
 <h1>Název filmu: {{ film["title"] }}</h1>
 
 <h2>Rok vydání: {{ film["year"] }}</h2>
+
+<div id="ratingDiv" defaultUserRating="{{ usersRating }}">
+
+        {% for i in range(10) %}
+
+            {% if i <= usersRating - 1 %}
+                <img src="../static/imgs/full.png" alt="" order="{{i+1}}">
+            {% else %}
+                <img src="../static/imgs/empty.png" alt="" order="{{i+1}}">
+            {% endif %}
+        {% endfor %}
+
+    </div>
 
 <h2>Hodnocení na IMBd: {{ film["rating"] }}</h2>
 
@@ -33,5 +48,11 @@
 </video>
 
 </main>
+
+    {% else %}
+
+    <p>{{ errorMessage }}</p>
+
+{% endif %}
 
 {% include 'reusable/footer.html' %}
