@@ -87,28 +87,41 @@ def filmPage(filmId):
     film = Dbwrapper.getFilmById(filmId)
     # Získání informací o konkrétním filmu podle jeho IMDb ID
     rating = 0
-    # Převedení výsledku na slovník, získání jednoho jediného prvku na indexu 0
+    # Základní hodnota hodnocení je 0
     if "user" in session:
         rating = Dbwrapper.getRating(session["user"]["id"], filmId)
+        # Pokud je uživatel v sessionu, tak pomocí metody getRating získáme hodnocení konkrétního uživatele pro konkrétní film
     if film:
+    # pokud film existuje (nachází se v databázi)
         return render_template( 'film.html', film=film, usersRating=rating)
-        # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatelů
+        # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatele
     return render_template("film.html", errorMessage = "Film not found")
+    # Pokud se stránka s filmem nenajde, tak zahlásíme error
 
 @app.route('/hodnoceniFilmu', methods=['POST', 'GET'])
+# "stránka" na kterou se zavolá při zhodnocení filmu, volání v JavaScriptu Rating.js
 def hodnoceniFilmu():
+    # funkce, která zhodnocení filmu zpracovává
     val = request.json
+    # získá data z HTTP požadavku jako json objekt a přiřadí ho proměnné val
     print(val)
+    # val je zde slovník s daty o hodnocení a filmu, tisk do konzole pro kontrolu
 
     if 'user' not in session:
         return "notlogedin"
+    # Pokud příchozí na stránku film ohodnotí, ale není přihlášen, tak se mu vyhodí hláška pro přihlášení
 
     print(session['user']['id'], val['filmId'], val['rating'])
-    result = Dbwrapper.addRating( session['user']['id'], val['filmId'], val['rating'] )
+    # pro kontrolu si tiskneme id uživatele, id filmu a hodnocení
+    result = Dbwrapper.addRating(session['user']['id'], val['filmId'], val['rating'])
+    # data posíláme jako parametry funkce, která je pošle na zapsání do databáze
     print(result)
+    # Funkce addRating vrací False/True, tento výsledek jsme si uložili a budeme s ním pracovat
     if result:
         return "success"
+        # Data se přidala úspěšně a funkce vrátila True, my tím pádem pošleme do JavaScriptu hlášku "success" - úspěch
 
     return "fail"
+    # Pokud se přidání do databáze nezdaří, tak se předchozí podmínka nesplní a do JS pošleme hlášku "fail" - selhání
 
 
