@@ -115,7 +115,7 @@ class Dbwrapper:
         # Pokud vše proběhne bez problému, tak funce vrátí True, tím se také splní podmínka v předchozí funkci, která rovněž vrátí True
 
     @staticmethod
-    def addReview(userId, filmId, content, date):
+    def addReview( userId, filmId, content, date ):
         query = text("INSERT INTO reviews (user, film, content ,date) VALUES (:user, :film, :content, :date)")
         parametres = {"user": userId, "film": filmId, "content": content, "date": date}
 
@@ -124,21 +124,21 @@ class Dbwrapper:
             db.session.commit()
         except SQLAlchemyError as e:
             db.session.rollback()
-            print( e )
+            print(e)
             return False
         return True
 
     @staticmethod
-    def deleteReview(userId, filmId):
-        query = text("DELETE FROM reviews WHERE user = :user AND film = :film")
-        parametres = {"user": userId, "film": filmId}
+    def deleteReview(userId, reviewId ):
+        query = text("DELETE FROM reviews WHERE id = :reviewId and user = :userId")
+        parametres = {"reviewId": reviewId, "userId": userId}
 
         try:
             db.session.execute(query, parametres)
             db.session.commit()
         except SQLAlchemyError as e:
             db.session.rollback()
-            print( e )
+            print(e)
             return False
         return True
 

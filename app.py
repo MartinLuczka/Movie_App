@@ -86,15 +86,6 @@ def searchBarProcess():
 @app.route('/film/<filmId>', methods = ["GET", "POST"])
 # cesta daná <filmId>, pro každý film unikátní
 def filmPage(filmId):
-
-    if request.method == 'POST':
-        if 'user' in session:
-            reviewContent = request.form['reviewContent']
-            print("AddReview:" + str(Dbwrapper.addReview(session['user']['id'], filmId, reviewContent, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))))
-            print(request.form["reviewContent"])
-            # Vypsání obsahu recenze
-
-
     allReviews = Dbwrapper.getAllReviewsByFilm(filmId)
     # Získáme všechny recenze daného filmu
     film = Dbwrapper.getFilmById(filmId)
@@ -122,10 +113,26 @@ def filmPage(filmId):
 
     if film:
     # pokud film existuje (nachází se v databázi)
-        return render_template( 'film.html', film=film, userRating=rating, user=user, usersReview=usersReview, allReviews = allReviews)
+        return render_template( 'film.html', film=film, userRating=rating, user=user, userReview=usersReview, allReviews = allReviews)
         # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatele
     return render_template("film.html", errorMessage = "Film not found")
     # Pokud se stránka s filmem nenajde, tak zahlásíme error
+
+@app.route('/addReview', methods=['POST'])
+def addReview():
+    if request.method == 'POST' and 'user' in session:
+        Dbwrapper.addReview(session['user']['id'], request.form['filmId'], request.form['reviewContent'], datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        return redirect(request.referrer)
+        # Odkud jsme request poslali, odkud jsme přišli
+    return "chyba"
+
+@app.route('/deleteReview', methods=['POST'])
+def deleteReview():
+    if request.method == 'POST' and 'user' in session:
+        print(request.form)
+        Dbwrapper.deleteReview(session['user']['id'] ,request.form['reviewId'] )
+        return redirect(request.referrer)
+    return "chyba"
 
 @app.route('/hodnoceniFilmu', methods=['POST', 'GET'])
 # "stránka" na kterou se zavolá při zhodnocení filmu, volání v JavaScriptu Rating.js

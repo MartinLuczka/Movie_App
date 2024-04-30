@@ -52,20 +52,21 @@
 
         {% if user %}
 
-            {% if usersReview %}
+            {% if userReview %}
 
                 <div>
                     <p>Recenze uživatele:</p>
-                    <h3>{{ usersReview }}</h3>
-                    <form action="" method ="post"></form>
+                    <h3>{{ userReview }}</h3>
+                    <form action="/deleteReview" method="post"><input type="hidden" name="reviewId" value="{{ userReview.id }}"><input type="submit" value="Odstranit"></form>
                 </div>
 
             {% else %}
 
-                <form action="" method="post">
+                <form action="/addReview" method="post">
 
                     <label for="textarea"></label>
                     <textarea name="reviewContent" id="textarea" cols="30" rows="10"></textarea>
+                    <input type="hidden" name="filmId" value="{{ film['imdbId'] }}">
                     <input type="submit" value ="Poslat recenzi">
 
                 </form>
