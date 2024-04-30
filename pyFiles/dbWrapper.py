@@ -113,3 +113,43 @@ class Dbwrapper:
             # Výpis konkrétní chyby a vrácení hodnoty False
         return True
         # Pokud vše proběhne bez problému, tak funce vrátí True, tím se také splní podmínka v předchozí funkci, která rovněž vrátí True
+
+    @staticmethod
+    def addReview(userId, filmId, content, date):
+        query = text("INSERT INTO reviews (user, film, content ,date) VALUES (:user, :film, :content, :date)")
+        parametres = {"user": userId, "film": filmId, "content": content, "date": date}
+
+        try:
+            db.session.execute(query, parametres)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print( e )
+            return False
+        return True
+
+    @staticmethod
+    def deleteReview(userId, filmId):
+        query = text("DELETE FROM reviews WHERE user = :user AND film = :film")
+        parametres = {"user": userId, "film": filmId}
+
+        try:
+            db.session.execute(query, parametres)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print( e )
+            return False
+        return True
+
+    @staticmethod
+    def getReview( userId, filmId ):
+        query = text("SELECT * FROM reviews WHERE user = :user AND film = :film")
+        parametres = {"user": userId, "film": filmId}
+        return db.session.execute(query, parametres).fetchone()
+
+    @staticmethod
+    def getAllReviewsByFilm(filmId):
+        query = text("SELECT reviews.*, users.username FROM reviews JOIN users ON reviews.user = users.id WHERE film = :film")
+        parametres = {"film": filmId}
+        return db.session.execute(query, parametres).fetchall()

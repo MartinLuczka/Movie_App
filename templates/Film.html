@@ -10,42 +10,82 @@
 
 <main filmId="{{ film['imdbId'] }}">
 
-<h1>Název filmu: {{ film["title"] }}</h1>
+    <h1>Název filmu: {{ film["title"] }}</h1>
+    
+    <h2>Rok vydání: {{ film["year"] }}</h2>
+    
+    <div id="ratingDiv" defaultUserRating="{{ userRating }}">
+    
+            {% for i in range(10) %}
+    
+                {% if i <= userRating - 1 %}
+                    <img src="../static/imgs/full.png" alt="" order="{{i+1}}">
+                {% else %}
+                    <img src="../static/imgs/empty.png" alt="" order="{{i+1}}">
+                {% endif %}
+            {% endfor %}
+    
+        </div>
+    
+    <h2>Hodnocení na IMBd: {{ film["rating"] }}</h2>
+    
+    <h3>Režisér filmu: {{ film.director["name"] }}</h3>
+    {# Zeptat se chata, jak dostat informace z json #}
+    
+    <h3>Herci ve filmu: {{ film["actors"][0]["name"] }}</h3>
+    
+    <h3>Popis filmu: {{ film["description"] }}</h3>
+    
+    <h2>Plakát k filmu:</h2>
+    
+    <img src="{{ film["posterImgSrc"] }}" alt="Plakát filmu {{ film["title"] }}" width="300">
+    
+        <br>
+    
+    <h2>Trailer k filmu:</h2>
+    
+    <video width="640" height="360" controls>
+            <source src="{{ film["trailerUrl"] }}" type="video/mp4">
+    </video>
+    
+    <div id = "reviewsDiv">
 
-<h2>Rok vydání: {{ film["year"] }}</h2>
+        {% if user %}
 
-<div id="ratingDiv" defaultUserRating="{{ usersRating }}">
+            {% if usersReview %}
 
-        {% for i in range(10) %}
+                <div>
+                    <p>Recenze uživatele:</p>
+                    <h3>{{ usersReview }}</h3>
+                    <form action="" method ="post"></form>
+                </div>
 
-            {% if i <= usersRating - 1 %}
-                <img src="../static/imgs/full.png" alt="" order="{{i+1}}">
             {% else %}
-                <img src="../static/imgs/empty.png" alt="" order="{{i+1}}">
+
+                <form action="" method="post">
+
+                    <label for="textarea"></label>
+                    <textarea name="reviewContent" id="textarea" cols="30" rows="10"></textarea>
+                    <input type="submit" value ="Poslat recenzi">
+
+                </form>
             {% endif %}
-        {% endfor %}
+        {% endif %}
+
+        <p>Recenze uživatelů:</p>
+
+        <ul>
+
+            {% for review in allReviews %}
+
+            <li>
+                <h3>{{ review }}</h3>
+            </li>
+
+            {% endfor %}
+        </ul>
 
     </div>
-
-<h2>Hodnocení na IMBd: {{ film["rating"] }}</h2>
-
-<h3>Režisér filmu: {{ film["director"]["name"] }}</h3>
-
-<h3>Herci ve filmu: {{ film["actors"][0]["name"] }}</h3>
-
-<h3>Popis filmu: {{ film["description"] }}</h3>
-
-<h2>Plakát k filmu:</h2>
-
-<img src="{{ film["posterImgSrc"] }}" alt="Plakát filmu {{ film["title"] }}" width="300">
-
-    <br>
-
-<h2>Trailer k filmu:</h2>
-
-<video width="640" height="360" controls>
-        <source src="{{ film["trailerUrl"] }}" type="video/mp4">
-</video>
 
 </main>
 

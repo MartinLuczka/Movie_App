@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask, render_template, request, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
@@ -81,19 +83,46 @@ def searchBarProcess():
     return jsonify({"data": films})
     # Vrácení výsledků ve formátu JSON s klíčem "data", obsahující seznam filmů
 
-@app.route('/film/<filmId>')
+@app.route('/film/<filmId>', methods = ["GET", "POST"])
 # cesta daná <filmId>, pro každý film unikátní
 def filmPage(filmId):
+
+    if request.method == 'POST':
+        if 'user' in session:
+            reviewContent = request.form['reviewContent']
+            print("AddReview:" + str(Dbwrapper.addReview(session['user']['id'], filmId, reviewContent, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))))
+            print(request.form["reviewContent"])
+            # Vypsání obsahu recenze
+
+
+    allReviews = Dbwrapper.getAllReviewsByFilm(filmId)
+    # Získáme všechny recenze daného filmu
     film = Dbwrapper.getFilmById(filmId)
     # Získání informací o konkrétním filmu podle jeho IMDb ID
     rating = 0
     # Základní hodnota hodnocení je 0
+    user = False
+    # Defaultní hodnota pro nepřihlášeného uživatele
+    usersReview = None
+    # Defaultní hodnota pro to, jestli má uživatel recenzi
     if "user" in session:
         rating = Dbwrapper.getRating(session["user"]["id"], filmId)
         # Pokud je uživatel v sessionu, tak pomocí metody getRating získáme hodnocení konkrétního uživatele pro konkrétní film
+        usersReview = Dbwrapper.getReview(session["user"]["id"], filmId)
+        # Získáme informaci o tom, jestli má uživatel již recenzi k danému filmu, podle toho budeme přizpůsobovat elementy v HTML
+        try:
+            for review in allReviews:
+                if review.id == usersReview.id:
+                    allReviews.remove(review)
+        except:
+            pass
+        # Pokud přihlášený uživatel má recenzi, tak ji vymaž ze všech recenzí
+        user = True
+        # Kontrola, že je uživatel přihlášen je dána podmínkou, rovnou nastavme do True
+
     if film:
     # pokud film existuje (nachází se v databázi)
-        return render_template( 'film.html', film=film, usersRating=rating)
+        return render_template( 'film.html', film=film, userRating=rating, user=user, usersReview=usersReview, allReviews = allReviews)
         # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatele
     return render_template("film.html", errorMessage = "Film not found")
     # Pokud se stránka s filmem nenajde, tak zahlásíme error
