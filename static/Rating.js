@@ -47,7 +47,7 @@ $(document).ready(function(){
     function sendToServer(hvezdaVal) {
     // Funkce pro odeslání hodnocení na server
         $.ajax({
-        // tvorba requestu na server
+        // Tvorba requestu na server
             type: 'POST',
             // Typ požadavku POST
             url: '/hodnoceniFilmu',
