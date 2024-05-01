@@ -61,11 +61,11 @@ class Dbwrapper:
         # Pokud dojde k chybě při vykonávání dotazu na databázi, vrátí se také hodnota 0
 
     @staticmethod
-    def addRating(userId, filmId, rating):
+    def addRating(userId, filmId, rating, dateTime):
     # Metoda pro přidání hodnocení do databáze pro daného uživatele a film
-        query = text("INSERT INTO ratings (userId, filmId, rating) VALUES (:userId, :filmId, :rating)")
+        query = text("INSERT INTO ratings (userId, filmId, rating, dateTime) VALUES (:userId, :filmId, :rating, :dateTime)")
         # Vytvoření SQL dotazu pro vložení nového hodnocení do tabulky ratings
-        parametres = {"userId": userId, "filmId": filmId, "rating": rating}
+        parametres = {"userId": userId, "filmId": filmId, "rating": rating, "dateTime": dateTime}
         # Definice parametrů pro dotaz (userId, filmId, rating)
         try:
         # Pokus o provedení SQL dotazu a potvrzení změn v databázi
@@ -81,7 +81,7 @@ class Dbwrapper:
             # Vrácení změn provedených před chybou
             if isinstance(e.orig, IntegrityError): # Zpracování specifických typů chyb
             # Pokud hodnocení již bylo zadáno, tak se volá pouze funkce pro změnu
-                if Dbwrapper.changeRating(userId, filmId, rating):
+                if Dbwrapper.changeRating(userId, filmId, rating, dateTime):
                     # Volání metody pro změnu hodnocení
                     return True
                     # změna hodnocení se provede a tato funkce vrátí True
@@ -92,12 +92,12 @@ class Dbwrapper:
         # Pokud nebyla vznesena jakákoliv chyba, tak se vše provedlo správně a můžeme vrátit True
 
     @staticmethod
-    def changeRating(userId, filmId, rating):
+    def changeRating(userId, filmId, rating, dateTime):
     # Metoda pro změnu hodnocení pro daného uživatele a film
-        query = text('UPDATE ratings SET rating = :rating WHERE userId = :userId AND filmId = :filmId')
+        query = text('UPDATE ratings SET rating = :rating, dateTime = :dateTime WHERE userId = :userId AND filmId = :filmId')
         # Vytvoření SQL dotazu pro aktualizaci hodnocení ve stávajícím záznamu v tabulce ratings
-        parametres = {"userId": userId, "filmId": filmId, "rating": rating}
-        # Definice parametrů pro dotaz (userId, filmId, rating)
+        parametres = {"userId": userId, "filmId": filmId, "rating": rating, "dateTime": dateTime}
+        # Definice parametrů pro dotaz (userId, filmId, rating, dateTime)
         try:
         # Pokus o provedení SQL dotazu a potvrzení změn v databázi
             db.session.execute(query, parametres)
@@ -176,7 +176,7 @@ class Dbwrapper:
         query = text("SELECT reviews.*, users.username FROM reviews JOIN users ON reviews.user = users.id WHERE film = :film")
         # Vybere všechny sloupce z tabulky reviews a přidá sloupec username z tabulky users,
         # to zjistí porovnáním "user" z tabulky "reviews" a "id" z tabulky "users"
-        # s tím, že nás pouze zajímají záznamy spojené ze zadaným filmem
+        # s tím, že nás pouze zajímají záznamy spojené se zadaným filmem
         parametres = {"film": filmId}
         # Zadání parametrů pro dotaz
         return db.session.execute(query, parametres).fetchall()

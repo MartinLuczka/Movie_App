@@ -12,7 +12,6 @@ $(document).ready(function(){
     hvezdy.hover(function(event){
         // Když máme myš nad kteroukoliv hvězdou
         for (var i = 0; i < hvezdy.length; i++) {
-            console.log(i)
             // Projdeme si všechny hvězdy
             if (event.target.getAttribute("order") >= i + 1) {
             // Rozsvítíme hvězdu na kterou ukazujeme a také všechny pod ní

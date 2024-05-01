@@ -141,7 +141,7 @@ def deleteReview():
 # Tuto funkci voláme, pokud zmáčkneme v html tlačítko pro smazání naší recenze
     if request.method == 'POST' and 'user' in session:
     # Pokud je požadavek "POST" a uživatel je v sessionu (je přihlášen)
-        Dbwrapper.deleteReview(session['user']['id'], request.form['reviewId'] )
+        Dbwrapper.deleteReview(session['user']['id'], request.form['reviewId'])
         # Voláme metodu, která z databáže vymaže uživatelovu recenzi, předáváme id uživatele a také id recenze
         return redirect(request.referrer)
         # Přesměrování tam, odkud jsme request poslali, odkud jsme přišli
@@ -161,9 +161,9 @@ def hodnoceniFilmu():
         return "notlogedin"
     # Pokud příchozí na stránku film ohodnotí, ale není přihlášen, tak se mu vyhodí hláška pro přihlášení
 
-    print(session['user']['id'], val['filmId'], val['rating'])
-    # pro kontrolu si tiskneme id uživatele, id filmu a hodnocení
-    result = Dbwrapper.addRating(session['user']['id'], val['filmId'], val['rating'])
+    print(session['user']['id'], val['filmId'], val['rating'], datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    # pro kontrolu si tiskneme id uživatele, id filmu, hodnocení a čas hodnocení
+    result = Dbwrapper.addRating(session['user']['id'], val['filmId'], val['rating'], datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     # data posíláme jako parametry funkce, která je pošle na zapsání do databáze
     print(result)
     # Funkce addRating vrací False/True, tento výsledek jsme si uložili a budeme s ním pracovat
