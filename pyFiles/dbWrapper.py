@@ -115,41 +115,69 @@ class Dbwrapper:
         # Pokud vše proběhne bez problému, tak funce vrátí True, tím se také splní podmínka v předchozí funkci, která rovněž vrátí True
 
     @staticmethod
-    def addReview( userId, filmId, content, date ):
+    def addReview(userId, filmId, content, date):
+    # Metoda pro přidání recenze uživatelem k danému filmu
         query = text("INSERT INTO reviews (user, film, content ,date) VALUES (:user, :film, :content, :date)")
+        # Vytvoření dotazu pro SQL databázi, to tabulky "reviews" chceme vložit data, kterými jsme funkci volali
         parametres = {"user": userId, "film": filmId, "content": content, "date": date}
+        # Parametry pro dotaz
 
         try:
             db.session.execute(query, parametres)
             db.session.commit()
+            # Zkusíme data zapsat do databáze
         except SQLAlchemyError as e:
+        # Pokud nastane chyba
             db.session.rollback()
+            # Vrácení změn udělaným před chybou
             print(e)
+            # Chybu si vytiskneme
             return False
+            # Vrátíme False, zapsání recenze se nepodařilo
         return True
+        # Pokud se provedl správně blok try, tak vrátíme True, zapsání do databáze se podařilo
 
     @staticmethod
-    def deleteReview(userId, reviewId ):
+    def deleteReview(userId, reviewId):
+    # Metoda, se kterou lze vymazat recenze v databázi (pokud chce uživatel upravit recenzi, tak musí smazat svou předchozí a poté může vložit novou)
         query = text("DELETE FROM reviews WHERE id = :reviewId and user = :userId")
+        # Dotaz pro databázi, ve kterém chceme smazat záznam recenze, když známe id recenze a id uživatele, kterému recenze patří
         parametres = {"reviewId": reviewId, "userId": userId}
+        # Parametry, které vkládáme do dotazu
 
         try:
             db.session.execute(query, parametres)
             db.session.commit()
+            # Zkusíme dotaz poslat do databáze na vykonání
         except SQLAlchemyError as e:
+        # Když nastane chyba
             db.session.rollback()
+            # Vrátíme změny udělané před chybou
             print(e)
+            # Chybu si vytiskneme
             return False
+            # Smazání záznamu se nepodařilo, vrátíme False
         return True
+        # Smazání se podařilo, vrátíme True
 
     @staticmethod
-    def getReview( userId, filmId ):
+    def getReview(userId, filmId):
+    # Metoda, pomocí které můžeme získat recenzi daného uživatele u daného filmu
         query = text("SELECT * FROM reviews WHERE user = :user AND film = :film")
+        # Dotaz pro databázi, chceme vybrat vše z tabulky "reviews", když zadáme uživatele a film
         parametres = {"user": userId, "film": filmId}
+        # Určení parametrů pro dotaz
         return db.session.execute(query, parametres).fetchone()
+        # Vracíme si recenzi (JEDNU), kterou nám databáze poslala ze zadaného dotazu
 
     @staticmethod
     def getAllReviewsByFilm(filmId):
+    # Metoda, se kterou získáme všechny recenze k danému filmu
         query = text("SELECT reviews.*, users.username FROM reviews JOIN users ON reviews.user = users.id WHERE film = :film")
+        # Vybere všechny sloupce z tabulky reviews a přidá sloupec username z tabulky users,
+        # to zjistí porovnáním "user" z tabulky "reviews" a "id" z tabulky "users"
+        # s tím, že nás pouze zajímají záznamy spojené ze zadaným filmem
         parametres = {"film": filmId}
+        # Zadání parametrů pro dotaz
         return db.session.execute(query, parametres).fetchall()
+        # Vrátíme si z databáze VŠECHNY recenze, kterým odpovídají zadané parametry (vypsání všech recenzí na stránce filmu)

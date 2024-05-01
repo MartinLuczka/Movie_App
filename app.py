@@ -102,12 +102,18 @@ def filmPage(filmId):
         usersReview = Dbwrapper.getReview(session["user"]["id"], filmId)
         # Získáme informaci o tom, jestli má uživatel již recenzi k danému filmu, podle toho budeme přizpůsobovat elementy v HTML
         try:
+        # Logika pro odstranění naší recenze ze všech recenzí (naši si budeme zobrazovat vždy samostatně nahoře)
             for review in allReviews:
+            # projíždíme si jednotlivě recenze v allReviews
                 if review.id == usersReview.id:
+                # Pokud je některé id recenze totožné s id naší recenze
                     allReviews.remove(review)
+                    # Tak tuto recenzi chceme ze všech recenzí vymazat
         except:
+        # Pokud se při cyklu něco pokazí
             pass
-        # Pokud přihlášený uživatel má recenzi, tak ji vymaž ze všech recenzí
+            # Tak nás to nezajímá a tuto část přeskočíme
+        # (popis celého try/except bloku): Pokud přihlášený uživatel má recenzi, tak ji vymaž ze všech recenzí
         user = True
         # Kontrola, že je uživatel přihlášen je dána podmínkou, rovnou nastavme do True
 
@@ -120,19 +126,27 @@ def filmPage(filmId):
 
 @app.route('/addReview', methods=['POST'])
 def addReview():
+# Funkce, kterou voláme při vyplnění formuláře v HTML
     if request.method == 'POST' and 'user' in session:
+        # Pokud uživatel pošle recenzi na server a také je přihlášen (je v sessionu)
         Dbwrapper.addReview(session['user']['id'], request.form['filmId'], request.form['reviewContent'], datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        # Voláme metodu, která nám přidá recenzi do databáze, posíláme id uživatele, id filmu, obsah recenze a také čas přidání recenze
         return redirect(request.referrer)
-        # Odkud jsme request poslali, odkud jsme přišli
+        # Přesměrování tam, odkud jsme request poslali, odkud jsme přišli
     return "chyba"
+    # Tato situace by neměla nastat, vyřešeno podmínkami v html dokumentu
 
 @app.route('/deleteReview', methods=['POST'])
 def deleteReview():
+# Tuto funkci voláme, pokud zmáčkneme v html tlačítko pro smazání naší recenze
     if request.method == 'POST' and 'user' in session:
-        print(request.form)
-        Dbwrapper.deleteReview(session['user']['id'] ,request.form['reviewId'] )
+    # Pokud je požadavek "POST" a uživatel je v sessionu (je přihlášen)
+        Dbwrapper.deleteReview(session['user']['id'], request.form['reviewId'] )
+        # Voláme metodu, která z databáže vymaže uživatelovu recenzi, předáváme id uživatele a také id recenze
         return redirect(request.referrer)
+        # Přesměrování tam, odkud jsme request poslali, odkud jsme přišli
     return "chyba"
+    # Tato situace by neměla nastat, vyřešeno podmínkami v html dokumentu
 
 @app.route('/hodnoceniFilmu', methods=['POST', 'GET'])
 # "stránka" na kterou se zavolá při zhodnocení filmu, volání v JavaScriptu Rating.js
