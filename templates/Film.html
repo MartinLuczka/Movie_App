@@ -5,6 +5,7 @@
 {#vložení obsahu dané stránky#}
 
 <script src = "../static/Rating.js"></script>
+<script>src = "../static/ReviewRating.js"</script>
 
 {% if film %}
 
@@ -79,8 +80,14 @@
 
             {% for review in allReviews %}
 
-            <li>
-                <h3>{{ review }}</h3>
+            <li reviewId = "{{ review["id"] }}">
+                <div>
+                    <h3>{{ review }}</h3>
+                    <div id = "reviewRating">
+                        <img src="/../static/imgs/thumb_up.png" alt="Palec nahoru" val = 1>
+                        <img src="/../static/imgs/thumb_down.png" alt="Palec dolů" val = 0>
+                    </div>
+                </div>
             </li>
 
             {% endfor %}
