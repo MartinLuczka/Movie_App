@@ -30,10 +30,13 @@
     
     <h2>Hodnocení na IMBd: {{ film["rating"] }}</h2>
     
-    <h3>Režisér filmu: {{ film.director["name"] }}</h3>
+    <h3>Režisér filmu: {{ director_name }}</h3>
     {# Zeptat se chata, jak dostat informace z json #}
     
-    <h3>Herci ve filmu: {{ film["actors"][0]["name"] }}</h3>
+    <h3>Herci ve filmu: {% for actor in actors %}
+        <p>{{ actor }}</p>
+        {% endfor %}
+    </h3>
     
     <h3>Popis filmu: {{ film["description"] }}</h3>
     

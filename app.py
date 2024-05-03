@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from dbModels.Models import db
 from pyFiles.UserController import login, signup
 from pyFiles.dbWrapper import Dbwrapper
+from pyFiles.GetData import findDirector, findActors
 
 # používané importy
 
@@ -86,6 +87,10 @@ def searchBarProcess():
 @app.route('/film/<filmId>', methods = ["GET", "POST"])
 # cesta daná <filmId>, pro každý film unikátní
 def filmPage(filmId):
+    director_name = findDirector(filmId)
+    # Získáme jméno režiséra daného filmu
+    actors = findActors(filmId)
+    # Získáme seznam (hlavních) herců, kteří hrají v daném filmu
     allReviews = Dbwrapper.getAllReviewsByFilm(filmId)
     # Získáme všechny recenze daného filmu
     film = Dbwrapper.getFilmById(filmId)
@@ -119,7 +124,7 @@ def filmPage(filmId):
 
     if film:
     # pokud film existuje (nachází se v databázi)
-        return render_template( 'film.html', film=film, userRating=rating, user=user, userReview=usersReview, allReviews = allReviews)
+        return render_template( 'film.html', film=film, userRating=rating, user=user, userReview=usersReview, allReviews = allReviews, director_name = director_name, actors = actors)
         # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatele
     return render_template("film.html", errorMessage = "Film not found")
     # Pokud se stránka s filmem nenajde, tak zahlásíme error
