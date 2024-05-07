@@ -84,6 +84,23 @@ def searchBarProcess():
     return jsonify({"data": films})
     # Vrácení výsledků ve formátu JSON s klíčem "data", obsahující seznam filmů
 
+@app.route( '/user/<int:id>' )
+def userPage(id):
+    user = Dbwrapper.getUserById(id)
+    if user:
+        usersRatings = None
+        usersReviews = None
+        try:
+            usersRatings = Dbwrapper.getRatingsByUserId(id)
+        except Exception as e:
+            print(e)
+        try:
+            usersReviews = Dbwrapper.getReviewsByUserId(id)
+        except Exception as e:
+            print(e)
+        return render_template('User.html', user=user, usersRatings = usersRatings, usersReviews = usersReviews)
+    return render_template('User.html', errorMessage='User not found')
+
 @app.route('/film/<filmId>', methods = ["GET", "POST"])
 # cesta daná <filmId>, pro každý film unikátní
 def filmPage(filmId):

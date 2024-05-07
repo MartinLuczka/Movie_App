@@ -238,5 +238,27 @@ class Dbwrapper:
     @staticmethod
     def getReviewRatings(reviewId):
         query = text("SELECT * FROM reviewRatings WHERE review = :review")
-        params = {"review": reviewId}
-        return db.session.execute( query, params ).fetchall()
+        parametres = {"review": reviewId}
+        return db.session.execute(query, parametres).fetchall()
+
+    @staticmethod
+    def getUserById(id):
+        query = text("SELECT * FROM users WHERE id = :id")
+        parametres = {"id": id}
+        return db.session.execute( query, parametres ).fetchone()
+
+    @staticmethod
+    def getReviewsByUserId(userId):
+        query = text('SELECT * FROM reviews WHERE user = :userId')
+        parametres = {"userId": userId}
+        return db.session.execute(query, parametres).fetchall()
+
+    @staticmethod
+    def getRatingsByUserId(userId):
+        query = text(
+            'SELECT * FROM ratings' +
+            ' JOIN films ON films.imdbId = ratings.filmId' +
+            ' WHERE userId = :userId' +
+            ' ORDER BY dateTime DESC' )
+        parametres = {"userId": userId}
+        return db.session.execute( query, parametres ).fetchall()

@@ -5,7 +5,7 @@ from dbModels.Models import db
 class Rating(db.Model):
     __tablename__ = 'ratings'
     # Příkaz pro název databáze
-    filmId = db.Column(db.Integer, db.ForeignKey('films.imdbId'), primary_key=True)
+    filmId = db.Column(db.String(9), db.ForeignKey('films.imdbId'), primary_key=True)
     # Id filmu si bereme z databáze filmů, musí být unikátní
     userId = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     # Id uživatele si bereme z databáze uživatelů, musí být unikátní

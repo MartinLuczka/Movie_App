@@ -1,0 +1,14 @@
+{# Import částí, které se budou opakovat na více stránkách#}
+{% include 'reusable/header.html' %}
+{% include 'reusable/nav.html' %}
+{% include 'reusable/SearchBar.html' %}
+{#vložení obsahu dané stránky#}
+<main>
+<h1>{{ user }}</h1> <br>
+{{ usersRatings }} <br>
+{{ usersReviews }} <br>
+{{ errorMessage }} <br>
+
+</main>
+
+{% include 'reusable/footer.html' %}
