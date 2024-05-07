@@ -5,7 +5,7 @@
 {#vložení obsahu dané stránky#}
 
 <script src = "../static/Rating.js"></script>
-<script>src = "../static/ReviewRating.js"</script>
+<script src = "../static/ReviewRating.js"></script>
 
 {% if film %}
 
@@ -60,6 +60,15 @@
 
                 <div>
                     <p>Recenze uživatele:</p>
+                    <div>
+                        <p>{{ userReview.content }}</p>
+                        <h5>{{ userReview.date }}</h5>
+                        <div class="thumbsDiv" thumbsRating="{{ userReview['logedinUsersReviewRating'] }}">
+                            <h5 style="display: inline;" class="thumbsup">{{ userReview['reviewRatings']['thumbsup'] }}</h5>
+                            <img src="../static/imgs/thumb_up_full.png" alt = "Vybarvený palec nahoru">
+                            <h5 style="display: inline;" class="thumbsdown">{{ userReview['reviewRatings']['thumbsdown'] }}</h5>
+                            <img src="../static/imgs/thumb_down_full.png" alt="Vybarvený palec dolů">
+                        </div>
                     <h3>{{ userReview }}</h3>
                     <form action="/deleteReview" method="post"><input type="hidden" name="reviewId" value="{{ userReview.id }}"><input type="submit" value="Odstranit"></form>
                 </div>
@@ -83,15 +92,21 @@
 
             {% for review in allReviews %}
 
-            <li reviewId = "{{ review["id"] }}">
-                <div>
-                    <h3>{{ review }}</h3>
-                    <div id = "reviewRating">
-                        <img src="/../static/imgs/thumb_up.png" alt="Palec nahoru" val = 1>
-                        <img src="/../static/imgs/thumb_down.png" alt="Palec dolů" val = 0>
+            <li reviewId="{{ review['id'] }}">
+
+                    <div>
+                        <h3>{{ review.username}}</h3>
+                        <p>{{ review.content }}</p>
+                        <h5>{{ review.date }}</h5>
+                        <div class="thumbsDiv" thumbsRating="{{ review['logedinUsersReviewRating'] }}">
+                            <h5 style="display: inline;" class="thumbsup">{{ review['reviewRatings']['thumbsup'] }}</h5>
+                            <img src="../static/imgs/thumb_up.png" alt = "Palec nahoru" class="thumbsup" choiceVal="1">
+                            <h5 style="display: inline;" class="thumbsdown">{{ review['reviewRatings']['thumbsdown'] }}</h5>
+                            <img src="../static/imgs/thumb_down.png" alt="Palec dolů" class="thumbsdown" choiceVal="0">
+                        </div>
                     </div>
-                </div>
-            </li>
+
+                </li>
 
             {% endfor %}
         </ul>

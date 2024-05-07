@@ -101,6 +101,12 @@ def filmPage(filmId):
     # Defaultní hodnota pro nepřihlášeného uživatele
     usersReview = None
     # Defaultní hodnota pro to, jestli má uživatel recenzi
+    allReviewsWithoutLoggedinUser = []
+    try:
+        allReviews = Dbwrapper.rowsToDict( allReviews )
+    except Exception as e:
+        print(e)
+        # Nejsou žádné reviews
     if "user" in session:
         rating = Dbwrapper.getRating(session["user"]["id"], filmId)
         # Pokud je uživatel v sessionu, tak pomocí metody getRating získáme hodnocení konkrétního uživatele pro konkrétní film
@@ -122,9 +128,43 @@ def filmPage(filmId):
         user = True
         # Kontrola, že je uživatel přihlášen je dána podmínkou, rovnou nastavme do True
 
+    if allReviews:
+        # pokud jsou reviews
+        print(allReviews)
+
+        for i, review in enumerate(allReviews):
+            # pro vsechny reviews
+            print( review )
+            reviewRatings = Dbwrapper.rowsToDict(Dbwrapper.getReviewRatings(review['id']))
+            # vsechny raitingy k jendotlivym reviews
+            ratings = {"thumbsup": 0, "thumbsdown": 0}
+            # zaklani hodnota ratings
+
+            if reviewRatings:
+                for reviewRating in reviewRatings:
+                    # pro vsechny reviewRatingy
+                    if reviewRating['rating'] == 1:
+                        ratings["thumbsup"] += 1
+                    elif reviewRating['rating'] == 0:
+                        ratings["thumbsdown"] += 1
+
+                    if 'user' in session:
+                        if reviewRating['user'] == session['user']['id']:
+                            review['logedinUsersReviewRating'] = reviewRating['rating']
+                        else:
+                            review['logedinUsersReviewRating'] = -1
+            review['reviewRatings'] = ratings
+            try:
+                if review['user'] == session['user']['id']:
+                    usersReview = review
+                else:
+                    allReviewsWithoutLoggedinUser.append(review)
+            except Exception as e:
+                print(e)
+
     if film:
     # pokud film existuje (nachází se v databázi)
-        return render_template( 'film.html', film=film, userRating=rating, user=user, userReview=usersReview, allReviews = allReviews, director_name = director_name, actors = actors)
+        return render_template( 'film.html', film=film, userRating=rating, user=user, userReview=usersReview, allReviews = allReviewsWithoutLoggedinUser, director_name = director_name, actors = actors)
         # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatele
     return render_template("film.html", errorMessage = "Film not found")
     # Pokud se stránka s filmem nenajde, tak zahlásíme error
@@ -179,4 +219,11 @@ def hodnoceniFilmu():
     return "fail"
     # Pokud se přidání do databáze nezdaří, tak se předchozí podmínka nesplní a do JS pošleme hlášku "fail" - selhání
 
-
+@app.route('/setReviewRating', methods=["POST"])
+def setReviewRating():
+    if request.method == "POST":
+        print(request)
+        print(request.json)
+        Dbwrapper.setReviewRating(session['user']['id'], int(request.json['reviewId']), int(request.json['rating']))
+        return "success"
+    return "fail"

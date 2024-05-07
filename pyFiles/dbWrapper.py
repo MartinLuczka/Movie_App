@@ -181,3 +181,62 @@ class Dbwrapper:
         # Zadání parametrů pro dotaz
         return db.session.execute(query, parametres).fetchall()
         # Vrátíme si z databáze VŠECHNY recenze, kterým odpovídají zadané parametry (vypsání všech recenzí na stránce filmu)
+
+    @staticmethod
+    def setReviewRating(user, review, rating):
+        # nastav novy stav ratingu recenze
+        print(rating)
+        if rating == -1:
+            print("Hodnocení recenze odstraněno")
+            Dbwrapper.deleteReviewRating(user, review)
+            return True
+
+        if db.session.execute(text("SELECT * FROM reviewRatings WHERE review = :review"),
+                              {"review": review} ).fetchone() is None:
+            # pokud neexistuje, tak ho vytvor
+            return Dbwrapper.addReviewRating(user, review, rating)
+
+        query = text("UPDATE reviewRatings SET rating = :rating WHERE review = :review")
+        parametres = {"review": review, "rating": rating}
+        try:
+            print("Hodnocení rezenze změněno")
+            db.session.execute(query, parametres)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(e)
+            return False
+        return True
+
+    @staticmethod
+    def addReviewRating(user, review, rating):
+        print("Hodnocení rezence přidána")
+        query = text("INSERT INTO reviewRatings values (:user, :review, :rating)")
+        parametres = {"user": user, "review": review, "rating": rating}
+        try:
+            db.session.execute(query, parametres)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(e)
+            return False
+        return True
+
+    @staticmethod
+    def deleteReviewRating(user, review):
+        query = text("DELETE FROM reviewRatings WHERE user = :user AND review = :review")
+        parametres = {"user": user, "review": review}
+        try:
+            db.session.execute(query, parametres)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(e)
+            return False
+        return True
+
+    @staticmethod
+    def getReviewRatings(reviewId):
+        query = text("SELECT * FROM reviewRatings WHERE review = :review")
+        params = {"review": reviewId}
+        return db.session.execute( query, params ).fetchall()
