@@ -184,81 +184,133 @@ class Dbwrapper:
 
     @staticmethod
     def setReviewRating(user, review, rating):
-        # nastav novy stav ratingu recenze
+    # Metoda na nastavení nového stavu hodnocení recenze, posíláme si Id uživatele, který mění hodnocení, Id recenze a uživatelovo hodnocení
         print(rating)
+        # Hodnocení si pro kontrolu tiskneme do konzole
         if rating == -1:
+            # Pokud hodnota poslaného parametru je -1
             print("Hodnocení recenze odstraněno")
+            # Hláška do konzole
             Dbwrapper.deleteReviewRating(user, review)
+            # Parametry o uživatelovi a dané recenzi si posíláme do metody, která hodnocení recenze smaže z databáze
             return True
+            # Metodu dokončíme vrácením hodnoty True
 
         if db.session.execute(text("SELECT * FROM reviewRatings WHERE review = :review"),
                               {"review": review} ).fetchone() is None:
-            # pokud neexistuje, tak ho vytvor
+            # Zde provádíme kontrolu přítomnosti hodnocení dané recenze v databázi, podmínka je splněna, pokud v databázi záznam NENÍ
             return Dbwrapper.addReviewRating(user, review, rating)
+            # Metoda vrací pravdivostní hodnotu, kterou vrací metoda, pomocí které dané hodnocení recenze přidáme
 
         query = text("UPDATE reviewRatings SET rating = :rating WHERE review = :review")
+        # Pokud hodnocení recenze existuje, tak vytvoříme dotaz pro databázi, ve kterém upravujeme hodnocení
         parametres = {"review": review, "rating": rating}
+        # Zadání parametrů pro dotaz
         try:
-            print("Hodnocení rezenze změněno")
+            print("Hodnocení recenze změněno")
+            # Hlášková kontrola do konzole
             db.session.execute(query, parametres)
             db.session.commit()
+            # Zkusíme dotaz provést
         except SQLAlchemyError as e:
+        # Když nastane chyba
             db.session.rollback()
+            # Vrácení všech změn před chybou
             print(e)
+            # Chybu si vytiskneme do konzole
             return False
+            # Vrátíme False, něco se pokazilo, nastala chyba
         return True
+        # Provede se, vrátí True, pokud se hodnocení správně aktualizovalo
 
     @staticmethod
     def addReviewRating(user, review, rating):
-        print("Hodnocení rezence přidána")
+    # Metoda, která nám přidává hodnocení recenze do databáze
+        # Potřebujeme znát uživatele, který hodnocení zadal, jakou recenzi ohodnotil a jak ji ohodnotil
+        print("Hodnocení recence přidána")
+        # Hláška pro kontrolu do konzole
         query = text("INSERT INTO reviewRatings values (:user, :review, :rating)")
+        # Dotaz pro databázi, ve kterém chceme do tabulky "reviewRatings" vložit hodnoty, které jsou zároveň parametry metody
         parametres = {"user": user, "review": review, "rating": rating}
+        # Zadání parametrů pro dotaz
         try:
             db.session.execute(query, parametres)
             db.session.commit()
+            # Záznam zkusíme přidat
         except SQLAlchemyError as e:
+        # Když nastane chyba
             db.session.rollback()
+            # Vrácení změn před chybou
             print(e)
+            # Chybu si vytiskneme do konzole
             return False
+            # Vracíme False, něco se nepovedlo
         return True
+        # Vracíme True, hodnoty se do databáze zapsali v pořádku
 
     @staticmethod
     def deleteReviewRating(user, review):
+    # Metoda, kterou mažeme záznam o hodnocení recenze, potřebujeme znát uživatele, který hodnocení zrušil a u jaké recenze toto učinil
         query = text("DELETE FROM reviewRatings WHERE user = :user AND review = :review")
+        # Dotaz pro databázi, ve kterém mažeme záznam z tabulky databáze "reviewRatings"
         parametres = {"user": user, "review": review}
+        # Zadání parametrů pro dotaz
         try:
             db.session.execute(query, parametres)
             db.session.commit()
+            # Zkusíme záznam vymazat
         except SQLAlchemyError as e:
+        # Když nastane chyba
             db.session.rollback()
+            # Vrátíme změny před chybou
             print(e)
+            # Chybu si vytiskneme do konzole
             return False
+            # Něco se pokazilo, vracíme False
         return True
+        # Záznam se vymazal v pořádku, vracíme True
 
     @staticmethod
     def getReviewRatings(reviewId):
+    # Metoda, pomocí které získáme všechna hodnocení k dané recenzi, tudíž potřebujeme jen Id recenze
         query = text("SELECT * FROM reviewRatings WHERE review = :review")
+        # Dotaz pro databázi, chceme zvolit všechny hodnocení pro danou recenzi
         parametres = {"review": reviewId}
+        # Zadání parametru pro dotaz
         return db.session.execute(query, parametres).fetchall()
+        # Vracíme si všechna získaná data z databáze, vykonání dotazu pro databázi
 
     @staticmethod
     def getUserById(id):
+    # Metoda, kterou získáme data o uživateli podle jeho Id, které si do této metody posíláme jako parametr
         query = text("SELECT * FROM users WHERE id = :id")
+        # Dotaz pro databázi, ve kterém chceme zvolit/najít uživatele podle jeho Id
         parametres = {"id": id}
-        return db.session.execute( query, parametres ).fetchone()
+        # Zadání parametrů pro dotaz
+        return db.session.execute(query, parametres).fetchone()
+        # Vracíme si informace o daném uživateli, vykonání dotazu pro databázi
 
     @staticmethod
     def getReviewsByUserId(userId):
+    # Metoda kterou získáme VŠECHNY Recenze daného uživatele, Id uživatele si posíláme jako parametr
         query = text('SELECT * FROM reviews WHERE user = :userId')
+        # Dotaz pro databázi, ve kterém chceme zvolit všechny recenze s Id uživatele
         parametres = {"userId": userId}
+        # Zadání parametrů pro dotaz
         return db.session.execute(query, parametres).fetchall()
+        # Vracíme si všechny recenze daného uživatele, vykonání dotazu pro databázi
 
     @staticmethod
     def getRatingsByUserId(userId):
+    # Metoda, kterou získáme všechna hodnocení daného uživatele, jeho Id si zde posíláme jako parametr
         query = text(
             'SELECT * FROM ratings' +
             ' JOIN films ON films.imdbId = ratings.filmId' +
             ' WHERE userId = :userId' +
             ' ORDER BY dateTime DESC' )
+        # Dotaz pro databázi, ve kterém chceme zvolit všechny hodnocení uživatele + si podle Id filmu posíláme z databáze "films" informace o filmu
+        # Data seřazená podle datumu ohodnocení
         parametres = {"userId": userId}
-        return db.session.execute( query, parametres ).fetchall()
+        # Zadání parametrů pro dotaz
+        return db.session.execute(query, parametres).fetchall()
+        # Vracíme si všechny hodnocení uživatele + informace o filmu, ke kterému máme hodnocení, dotaz pro databázi zde vykonáme

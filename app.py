@@ -84,22 +84,33 @@ def searchBarProcess():
     return jsonify({"data": films})
     # Vrácení výsledků ve formátu JSON s klíčem "data", obsahující seznam filmů
 
-@app.route( '/user/<int:id>' )
+@app.route('/user/<int:id>')
+# Cesta pro zobrazení profilu uživatele, id uživatele zde máme jako parametr
 def userPage(id):
+# Funkce, zajišťující načtení stránky profilu uživatele
     user = Dbwrapper.getUserById(id)
+    # informace o uživateli získáme zavoláním metody, tyto informace si uložíme do proměnné user
     if user:
+    # Pokud jsme o něm nějaké informace zjistili
         usersRatings = None
         usersReviews = None
+        # Nastavení proměnných do počátečních hodnot
         try:
             usersRatings = Dbwrapper.getRatingsByUserId(id)
+            # Uživatelovi hodnocení si zkusíme uložit do proměnné
         except Exception as e:
             print(e)
+            # Pokud se vyskytne vyjímka, tak si ji budeme chtít zobrazit v konzoli
         try:
             usersReviews = Dbwrapper.getReviewsByUserId(id)
+            # Uživatelovi recenze si zkusíme uložit do proměnné
         except Exception as e:
             print(e)
+            # Pokud se vyskytne vyjímka, tak si ji budeme chtít zobrazit v konzoli
         return render_template('User.html', user=user, usersRatings = usersRatings, usersReviews = usersReviews)
+        # Vracíme načtení stránky HTML dokumentu, do kterého si posíláme získaná data pro vhodné zobrazení
     return render_template('User.html', errorMessage='User not found')
+    # Pokud jsme nenašli uživatele, tak načteme stránku vyjadřující, že se vyskytla chyba
 
 @app.route('/film/<filmId>', methods = ["GET", "POST"])
 # cesta daná <filmId>, pro každý film unikátní
@@ -119,11 +130,13 @@ def filmPage(filmId):
     usersReview = None
     # Defaultní hodnota pro to, jestli má uživatel recenzi
     allReviewsWithoutLoggedinUser = []
+    # Nastavení základní hodnoty pro náš seznam všech recenzí (mimo přihlášeného uživatele)
     try:
-        allReviews = Dbwrapper.rowsToDict( allReviews )
+        allReviews = Dbwrapper.rowsToDict(allReviews)
+        # Recenze daného filmu si zkusíme převést metodou na seznam
     except Exception as e:
         print(e)
-        # Nejsou žádné reviews
+        # Chyba, pokud nejsou žádné recenze
     if "user" in session:
         rating = Dbwrapper.getRating(session["user"]["id"], filmId)
         # Pokud je uživatel v sessionu, tak pomocí metody getRating získáme hodnocení konkrétního uživatele pro konkrétní film
@@ -146,41 +159,57 @@ def filmPage(filmId):
         # Kontrola, že je uživatel přihlášen je dána podmínkou, rovnou nastavme do True
 
     if allReviews:
-        # pokud jsou reviews
+        # Pokud máme nějaké recenze
         print(allReviews)
+        # Recenze si vypíšeme do konzole
 
         for i, review in enumerate(allReviews):
-            # pro vsechny reviews
-            print( review )
+            # Pro každou recenzi v seznamu
+            print(review)
+            # V každém projetí cyklem si vypíšeme recenzi, se kterou se pracuje
             reviewRatings = Dbwrapper.rowsToDict(Dbwrapper.getReviewRatings(review['id']))
-            # vsechny raitingy k jendotlivym reviews
+            # Všechny hodnocení k jednotlivým recenzím
             ratings = {"thumbsup": 0, "thumbsdown": 0}
-            # zaklani hodnota ratings
+            # Základní hodnoty hodnocení
 
             if reviewRatings:
+            # Pokud existují hodnocení k recenzi
                 for reviewRating in reviewRatings:
-                    # pro vsechny reviewRatingy
+                    # Pro každé hodnocení k recenzi
                     if reviewRating['rating'] == 1:
+                    # Pokud je hodnocení v databázi 1
                         ratings["thumbsup"] += 1
+                        # Přičti 1 k palcům nohoru
                     elif reviewRating['rating'] == 0:
+                    # Nebo pokud je hodnocení v databázi 0
                         ratings["thumbsdown"] += 1
+                        # Přičti jedničku k palcům dolů
 
                     if 'user' in session:
+                    # Pokud je uživatel přihlášen
                         if reviewRating['user'] == session['user']['id']:
+                            # Pokud se uživatel daného hodnocení shoduje s přihlášeným uživatelem
                             review['logedinUsersReviewRating'] = reviewRating['rating']
+                            # Uloží hodnocení přihlášeného uživatele do recenze
                         else:
                             review['logedinUsersReviewRating'] = -1
+                            # Jinak nastaví hodnocení na -1 (uživatel není autorem hodnocení)
             review['reviewRatings'] = ratings
+            # Přiřadí počet lajků a dislajků do recenze
             try:
                 if review['user'] == session['user']['id']:
                     usersReview = review
+                    # Zkusíme zkontrolovat podmínku - Pokud je uživatel autorem recenze, uloží recenzi do proměnné usersReview
                 else:
                     allReviewsWithoutLoggedinUser.append(review)
+                    # Jinak přidá recenzi do seznamu allReviewsWithoutLoggedinUser
             except Exception as e:
+            # Pokud dojde k chybě
                 print(e)
+                # Chybu si vytiskneme do konzole
 
     if film:
-    # pokud film existuje (nachází se v databázi)
+    # Pokud film existuje (nachází se v databázi)
         return render_template( 'film.html', film=film, userRating=rating, user=user, userReview=usersReview, allReviews = allReviewsWithoutLoggedinUser, director_name = director_name, actors = actors)
         # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatele
     return render_template("film.html", errorMessage = "Film not found")
@@ -232,15 +261,21 @@ def hodnoceniFilmu():
     if result:
         return "success"
         # Data se přidala úspěšně a funkce vrátila True, my tím pádem pošleme do JavaScriptu hlášku "success" - úspěch
-
     return "fail"
     # Pokud se přidání do databáze nezdaří, tak se předchozí podmínka nesplní a do JS pošleme hlášku "fail" - selhání
 
 @app.route('/setReviewRating', methods=["POST"])
+# URL na kterou se posílají data o recenzi a jejího hodnocení z JavaScript souboru
 def setReviewRating():
+# Funkce, pro nastavení hodnocení recenze
     if request.method == "POST":
+    # Pokud se něco poslalo
         print(request)
         print(request.json)
+        # Data si pracovně vypíšeme do konzole
         Dbwrapper.setReviewRating(session['user']['id'], int(request.json['reviewId']), int(request.json['rating']))
+        # JSON data z JavaScriptu si jednotlivě posíláme jako parametry pro metodu na změnu stavu recenze
         return "success"
+        # Vše se provedlo v pořádku, hodnocení recenze se upravilo
     return "fail"
+    # Něco se pokazilo, metoda se nezaznamenala jako POST

@@ -1,6 +1,4 @@
-console.log("Začátek")
 $(document).ready(function(){
-    console.log("Začátek")
     thumbsDivs = $('ul .thumbsDiv')
 
     thumbsDivs.each(function() {
