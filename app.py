@@ -275,3 +275,12 @@ def setReviewRating():
         # Vše se provedlo v pořádku, hodnocení recenze se upravilo
     return "fail"
     # Něco se pokazilo, metoda se nezaznamenala jako POST
+
+@app.route('/jePrihlaseny')
+def jePrihlaseny():
+# Funkce, která vrátí JavaScriptu informaci o tom, jestli je uživatel přihlášen
+    if 'user' in session:
+        return "1"
+        # Pokud je uživatel v sessionu, tak se vrátí pravda
+    return "0"
+    # Pokud není přihlášen, tak se vrátí nepravda
