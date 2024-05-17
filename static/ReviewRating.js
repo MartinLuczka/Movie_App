@@ -9,17 +9,19 @@ $(document).ready(function(){
         thumbsDivs.children("img").click(function () { // on click
         thumbsDiv = $(this).parent() // ziskat parent div palce
 
-        if (thumbsDiv.attr("thumbsRating") === $(this).attr("choiceVal")) {
+        if (thumbsDiv.attr("thumbsRating") === $(this).attr("choiceVal")) { // pokud je stejný
             thumbsDiv.attr("thumbsRating", -1)
-            $(this).next("h5").text(parseInt($(this).next("h5").text()) + 1)
+            $(this).prev("h5").text(parseInt($(this).prev("h5").text()) - 1)
         }
         else{
-            if (thumbsDiv.attr("thumbsRating") === -1) {
-                $(this).next("h5").text(parseInt($(this).prev("h5").text()) + 1)
+            if (thumbsDiv.attr("thumbsRating") === "-1") { // není hodnocení
+                $(this).prev("h5").text(parseInt($(this).prev("h5").text()) + 1)
+                // přidat 1 tam, kde jsme klikli
             }
             else {
-                $(this).next("h5").text(parseInt($(this).prev("h5").text()) - 1)
-                $(this).next("h5").siblings("h5").text(parseInt($(this).prev("h5").siblings("h5").text()) + 1)
+                $(this).prev("h5").text(parseInt($(this).prev("h5").text()) + 1) // přidáváme + 1 tam, kde jsme klikli
+                $(this).siblings("img").prev("h5").text(parseInt($(this).siblings("img").prev("h5").text()) - 1)
+                // siblings - hledej elementy na stejné úrovni
             }
             thumbsDiv.attr("thumbsRating", $(this).attr("choiceVal"))
         }

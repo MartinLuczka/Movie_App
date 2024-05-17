@@ -196,17 +196,13 @@ def filmPage(filmId):
                             # Jinak nastaví hodnocení na -1 (uživatel není autorem hodnocení)
             review['reviewRatings'] = ratings
             # Přiřadí počet lajků a dislajků do recenze
-            try:
-                if review['user'] == session['user']['id']:
-                    usersReview = review
-                    # Zkusíme zkontrolovat podmínku - Pokud je uživatel autorem recenze, uloží recenzi do proměnné usersReview
-                else:
-                    allReviewsWithoutLoggedinUser.append(review)
-                    # Jinak přidá recenzi do seznamu allReviewsWithoutLoggedinUser
-            except Exception as e:
-            # Pokud dojde k chybě
-                print(e)
-                # Chybu si vytiskneme do konzole
+            if 'user' in session and review['user'] == session['user']['id']:
+            # Pokud jakýkoliv uživatel je v sessionu a je autorem recenze
+                usersReview = review
+                # Uloží jeho recenzi do zvláštní proměnné
+            else:
+                allReviewsWithoutLoggedinUser.append(review)
+                # Pokud neplatí vrchní podmínka, tak recenzi přiřadíme k ostatním recenzím
 
     if film:
     # Pokud film existuje (nachází se v databázi)
