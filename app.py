@@ -30,8 +30,13 @@ with app.app_context():
 
 @app.route("/")
 def home():
-    print(session)
-    return render_template("HomePage.html", webTitle = "Domovská stránka")
+    average_ratings = Dbwrapper.rowsToDict(Dbwrapper.getAllAverageRatings())
+
+
+
+
+
+    return render_template("HomePage.html", webTitle = "Domovská stránka", average_ratings = average_ratings)
 # domovská stránka webu
 
 @app.route("/prihlaseni", methods = ["GET", "POST"])

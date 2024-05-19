@@ -314,3 +314,18 @@ class Dbwrapper:
         # Zadání parametrů pro dotaz
         return db.session.execute(query, parametres).fetchall()
         # Vracíme si všechny hodnocení uživatele + informace o filmu, ke kterému máme hodnocení, dotaz pro databázi zde vykonáme
+
+    @staticmethod
+    def getAllAverageRatings():
+        query = text(
+            '''SELECT filmId, title, year, avg(ratings.rating) AS avgRating, posterImgSrc
+               FROM ratings
+               INNER JOIN films ON ratings.filmId = films.imdbId
+               GROUP BY filmId
+               ORDER BY avgRating DESC
+               LIMIT 10;
+            '''
+        )
+        return db.session.execute(query).fetchall()
+
+        # group by - seskupení řádků podle určitého sloupce, máme kvůli avgRating

@@ -5,6 +5,43 @@
 {#vložení obsahu dané stránky#}
 <main>
 
+    <table id = "TopAverageRatings">
+        <thead>
+            <tr>
+                <th>
+                    Poster
+                </th>
+                <th>
+                    Název
+                </th>
+                <th>
+                    Rok
+                </th>
+                <th>
+                    Hodnocení
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for average_rating in average_ratings %}
+        	<tr>
+                <td>
+                    <img height="200px" src="{{ average_rating["posterImgSrc"] }}" alt="Plakát filmu">
+                </td>
+                <td>
+                    <h3><a href="/film/{{ average_rating["filmId"] }}">{{ average_rating["title"] }}</a></h3>
+                </td>
+                <td>
+                    <h3>{{ average_rating["year"] }}</h3>
+                </td>
+                <td>
+                    <h3>{{ average_rating["avgRating"] }}</h3>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
 
 </main>
 
