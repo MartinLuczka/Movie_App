@@ -9,38 +9,40 @@ from pyFiles.UserController import login, signup
 from pyFiles.dbWrapper import Dbwrapper
 from pyFiles.GetData import findDirector, findActors
 
-# používané importy
+# Používané importy
 
 app = Flask(__name__)
-# vytvoření instance samotné Flask aplikace, Třída Flask je hlavním prvkem knihovny Flask, reprezentuje samotnou aplikaci
+# Vytvoření instance samotné Flask aplikace, Třída Flask je hlavním prvkem knihovny Flask, reprezentuje samotnou aplikaci
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-# hranatými závorkami vytváříme záznam v konfiguračním slovníku flask aplikace, konfigurace webové aplikace, zavádíme jazyk a název databáze
+# Hranatými závorkami vytváříme záznam v konfiguračním slovníku flask aplikace, konfigurace webové aplikace, zavádíme jazyk a název databáze
 
 app.secret_key = "tajny_klic"
-# nastavení klíče pro session
+# Nastavení klíče pro session
 
-#print(app.config) - můžeme si zobrazit konfiguraci aplikace
+#print(app.config) - Můžeme si zobrazit konfiguraci aplikace
 
 db.init_app(app)
-# připojení databáze k aplikaci
+# Připojení databáze k aplikaci
 
 with app.app_context():
     db.create_all()
-# vytvoření souboru databáze, poskládání tabulek
+# Vytvoření souboru databáze, poskládání tabulek
 
 @app.route("/")
+# Domovská stránka webu
 def home():
+# Funkce, která se spustí, pokud se dostaneme na hlavní stránku
     average_ratings = Dbwrapper.rowsToDict(Dbwrapper.getAllAverageRatings())
+    # Získáme TOP 10 nejlépe hodnocených filmů na naší stránce, pracujeme dále se slovníkem
     top_active_users = Dbwrapper.rowsToDict(Dbwrapper.getTOPActiveUsers())
+    # Získáme TOP 10 nejaktivnějších uživatelů na naší stránce, pracujeme dále se slovníkem
     # print(json.dumps(top_active_users, indent=4))
     latest_reviews = Dbwrapper.rowsToDict(Dbwrapper.getLatestReviews())
-    print(json.dumps(latest_reviews, indent=4))
-
-
-
+    # Získáme TOP 10 nejnovějších recenzí na naší stránce, pracujeme dále se slovníkem
+    #print(json.dumps(latest_reviews, indent=4))
     return render_template("HomePage.html", webTitle = "Domovská stránka", average_ratings = average_ratings, top_active_users = top_active_users, latest_reviews = latest_reviews)
-# domovská stránka webu
+    # Naše slovníky posíláme na HTML stránku, kde s nimi poté dále pracujeme
 
 @app.route("/prihlaseni", methods = ["GET", "POST"])
 # stránka řešící přihlášení
@@ -295,24 +297,22 @@ def jePrihlaseny():
 
 @app.route('/nastaveniProfilu', methods = ["GET", "POST"])
 def nastaveniProfilu():
+# Funkce, která se volá při kliknutí na nastavení profilu
     return render_template("UserSettings.html", webTitle = "Nastavení profilu")
+    # Načteme si HTML, na kterém jsou formuláře spojené s úpravou profilu uživatele
 
 @app.route('/aktualizaceProfilu', methods = ["GET", "POST"])
 def aktualizaceProfilu():
+# Funkce, která se volá pokud potvrdíme změny v nastavení profilu
     print(request.form)
+    # Tiskneme si do konzole
     '''uploaded_file = request.files['file']
     if uploaded_file.filename != '':
         print(uploaded_file.filename)
         uploaded_file.save(uploaded_file.filename)'''
     if request.form["user_description"] != "":
+    # Pokud string, který mění popis uživatele není nulový
         Dbwrapper.updateUserDescription(session["user"]["id"], request.form["user_description"])
-
-
-
-
-
-
-
-
-
+        # Pošleme id uživatele a obsah popisku jako parametry do metody, která provede přepsání v databázi
     return redirect('/nastaveniProfilu')
+    # Po provedení přesměrujeme zpátky na nastavení profilu, nebo můžeme třeba přesměrovat na stránku uživatele

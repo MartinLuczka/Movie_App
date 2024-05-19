@@ -7,11 +7,11 @@ from dbModels.Models import db
 
 
 class Dbwrapper:
-# Definice třídy Dbwrapper pro práci s databází
+    # Definice třídy Dbwrapper pro práci s databází
 
     @staticmethod
     def getFilmbyPartOfTitle(partOfTitle):
-    # Statická metoda pro získání filmů podle části jejich názvu
+        # Statická metoda pro získání filmů podle části jejich názvu
         query = text(
             'SELECT * FROM films WHERE title LIKE \'%\' || :title || \'%\''
             'ORDER BY rating DESC'
@@ -24,7 +24,7 @@ class Dbwrapper:
 
     @staticmethod
     def rowsToDict(rows):
-    # Statická metoda pro převod řádků na seznam slovníků
+        # Statická metoda pro převod řádků na seznam slovníků
         if rows is None:
             return []
         # Pokud je vstupní seznam prázdný nebo None, vrátí se prázdný seznam
@@ -33,23 +33,23 @@ class Dbwrapper:
 
     @staticmethod
     def getFilmById(id):
-    # Statická metoda pro získání filmu podle IMDb ID
+        # Statická metoda pro získání filmu podle IMDb ID
         query = text('SELECT * FROM films WHERE imdbId = :imdbId')
         # Sestavení SQL dotazu pro vyhledání filmu podle IMDb ID
         params = {"imdbId": id}
         # Parametry pro dotaz - IMDb ID
-        return db.session.execute( query, params ).fetchone()
+        return db.session.execute(query, params).fetchone()
         # Použití fetchone() pro získání jednoho řádku odpovídajícího dotazu
 
     @staticmethod
     def getRating(userId, filmId):
-    # Metoda pro získání hodnocení z databáze pro daného uživatele a film
+        # Metoda pro získání hodnocení z databáze pro daného uživatele a film
         query = text("SELECT rating FROM ratings WHERE userId = :userId AND filmId = :filmId")
         # Vytvoření SQL dotazu pro získání hodnocení pro konkrétního uživatele a film
         parametres = {"userId": userId, "filmId": filmId}
         # Definice parametrů pro dotaz
         try:
-        # Pokus o vykonání SQL dotazu na databázi
+            # Pokus o vykonání SQL dotazu na databázi
             try:
                 return db.session.execute(query, parametres).fetchone()[0]
                 # Vrácení hodnocení, chceme poslat pouze jeden výsledek na indexu 0
@@ -62,25 +62,26 @@ class Dbwrapper:
 
     @staticmethod
     def addRating(userId, filmId, rating, dateTime):
-    # Metoda pro přidání hodnocení do databáze pro daného uživatele a film
-        query = text("INSERT INTO ratings (userId, filmId, rating, dateTime) VALUES (:userId, :filmId, :rating, :dateTime)")
+        # Metoda pro přidání hodnocení do databáze pro daného uživatele a film
+        query = text(
+            "INSERT INTO ratings (userId, filmId, rating, dateTime) VALUES (:userId, :filmId, :rating, :dateTime)")
         # Vytvoření SQL dotazu pro vložení nového hodnocení do tabulky ratings
         parametres = {"userId": userId, "filmId": filmId, "rating": rating, "dateTime": dateTime}
         # Definice parametrů pro dotaz (userId, filmId, rating)
         try:
-        # Pokus o provedení SQL dotazu a potvrzení změn v databázi
+            # Pokus o provedení SQL dotazu a potvrzení změn v databázi
             db.session.execute(query, parametres)
             db.session.commit()
             print("rating added")
             # Výpis potvrzení, že hodnocení bylo úspěšně přidáno
         except SQLAlchemyError as e:
-        # Pokud dojde k chybě při provádění dotazu na databázi
+            # Pokud dojde k chybě při provádění dotazu na databázi
             print(e.orig)
             # Výpis původní chyby
             db.session.rollback()
             # Vrácení změn provedených před chybou
-            if isinstance(e.orig, IntegrityError): # Zpracování specifických typů chyb
-            # Pokud hodnocení již bylo zadáno, tak se volá pouze funkce pro změnu
+            if isinstance(e.orig, IntegrityError):  # Zpracování specifických typů chyb
+                # Pokud hodnocení již bylo zadáno, tak se volá pouze funkce pro změnu
                 if Dbwrapper.changeRating(userId, filmId, rating, dateTime):
                     # Volání metody pro změnu hodnocení
                     return True
@@ -93,19 +94,20 @@ class Dbwrapper:
 
     @staticmethod
     def changeRating(userId, filmId, rating, dateTime):
-    # Metoda pro změnu hodnocení pro daného uživatele a film
-        query = text('UPDATE ratings SET rating = :rating, dateTime = :dateTime WHERE userId = :userId AND filmId = :filmId')
+        # Metoda pro změnu hodnocení pro daného uživatele a film
+        query = text(
+            'UPDATE ratings SET rating = :rating, dateTime = :dateTime WHERE userId = :userId AND filmId = :filmId')
         # Vytvoření SQL dotazu pro aktualizaci hodnocení ve stávajícím záznamu v tabulce ratings
         parametres = {"userId": userId, "filmId": filmId, "rating": rating, "dateTime": dateTime}
         # Definice parametrů pro dotaz (userId, filmId, rating, dateTime)
         try:
-        # Pokus o provedení SQL dotazu a potvrzení změn v databázi
+            # Pokus o provedení SQL dotazu a potvrzení změn v databázi
             db.session.execute(query, parametres)
             db.session.commit()
             print("rating changed")
             # Výpis potvrzení, že hodnocení bylo úspěšně změněno
         except SQLAlchemyError as e:
-        # Pokud dojde k chybě při provádění dotazu na databázi
+            # Pokud dojde k chybě při provádění dotazu na databázi
             db.session.rollback()
             # Vrácení změn provedených před chybou
             print(e)
@@ -116,7 +118,7 @@ class Dbwrapper:
 
     @staticmethod
     def addReview(userId, filmId, content, date):
-    # Metoda pro přidání recenze uživatelem k danému filmu
+        # Metoda pro přidání recenze uživatelem k danému filmu
         query = text("INSERT INTO reviews (user, film, content ,date) VALUES (:user, :film, :content, :date)")
         # Vytvoření dotazu pro SQL databázi, to tabulky "reviews" chceme vložit data, kterými jsme funkci volali
         parametres = {"user": userId, "film": filmId, "content": content, "date": date}
@@ -127,7 +129,7 @@ class Dbwrapper:
             db.session.commit()
             # Zkusíme data zapsat do databáze
         except SQLAlchemyError as e:
-        # Pokud nastane chyba
+            # Pokud nastane chyba
             db.session.rollback()
             # Vrácení změn udělaným před chybou
             print(e)
@@ -139,7 +141,7 @@ class Dbwrapper:
 
     @staticmethod
     def deleteReview(userId, reviewId):
-    # Metoda, se kterou lze vymazat recenze v databázi (pokud chce uživatel upravit recenzi, tak musí smazat svou předchozí a poté může vložit novou)
+        # Metoda, se kterou lze vymazat recenze v databázi (pokud chce uživatel upravit recenzi, tak musí smazat svou předchozí a poté může vložit novou)
         query = text("DELETE FROM reviews WHERE id = :reviewId and user = :userId")
         # Dotaz pro databázi, ve kterém chceme smazat záznam recenze, když známe id recenze a id uživatele, kterému recenze patří
         parametres = {"reviewId": reviewId, "userId": userId}
@@ -150,7 +152,7 @@ class Dbwrapper:
             db.session.commit()
             # Zkusíme dotaz poslat do databáze na vykonání
         except SQLAlchemyError as e:
-        # Když nastane chyba
+            # Když nastane chyba
             db.session.rollback()
             # Vrátíme změny udělané před chybou
             print(e)
@@ -162,7 +164,7 @@ class Dbwrapper:
 
     @staticmethod
     def getReview(userId, filmId):
-    # Metoda, pomocí které můžeme získat recenzi daného uživatele u daného filmu
+        # Metoda, pomocí které můžeme získat recenzi daného uživatele u daného filmu
         query = text("SELECT * FROM reviews WHERE user = :user AND film = :film")
         # Dotaz pro databázi, chceme vybrat vše z tabulky "reviews", když zadáme uživatele a film
         parametres = {"user": userId, "film": filmId}
@@ -172,8 +174,9 @@ class Dbwrapper:
 
     @staticmethod
     def getAllReviewsByFilm(filmId):
-    # Metoda, se kterou získáme všechny recenze k danému filmu
-        query = text("SELECT reviews.*, users.username FROM reviews JOIN users ON reviews.user = users.id WHERE film = :film")
+        # Metoda, se kterou získáme všechny recenze k danému filmu
+        query = text(
+            "SELECT reviews.*, users.username FROM reviews JOIN users ON reviews.user = users.id WHERE film = :film")
         # Vybere všechny sloupce z tabulky reviews a přidá sloupec username z tabulky users,
         # to zjistí porovnáním "user" z tabulky "reviews" a "id" z tabulky "users"
         # s tím, že nás pouze zajímají záznamy spojené se zadaným filmem
@@ -184,7 +187,7 @@ class Dbwrapper:
 
     @staticmethod
     def setReviewRating(user, review, rating):
-    # Metoda na nastavení nového stavu hodnocení recenze, posíláme si Id uživatele, který mění hodnocení, Id recenze a uživatelovo hodnocení
+        # Metoda na nastavení nového stavu hodnocení recenze, posíláme si Id uživatele, který mění hodnocení, Id recenze a uživatelovo hodnocení
         print(rating)
         # Hodnocení si pro kontrolu tiskneme do konzole
         if rating == -1:
@@ -197,7 +200,7 @@ class Dbwrapper:
             # Metodu dokončíme vrácením hodnoty True
 
         if db.session.execute(text("SELECT * FROM reviewRatings WHERE review = :review"),
-                              {"review": review} ).fetchone() is None:
+                              {"review": review}).fetchone() is None:
             # Zde provádíme kontrolu přítomnosti hodnocení dané recenze v databázi, podmínka je splněna, pokud v databázi záznam NENÍ
             return Dbwrapper.addReviewRating(user, review, rating)
             # Metoda vrací pravdivostní hodnotu, kterou vrací metoda, pomocí které dané hodnocení recenze přidáme
@@ -213,7 +216,7 @@ class Dbwrapper:
             db.session.commit()
             # Zkusíme dotaz provést
         except SQLAlchemyError as e:
-        # Když nastane chyba
+            # Když nastane chyba
             db.session.rollback()
             # Vrácení všech změn před chybou
             print(e)
@@ -225,7 +228,7 @@ class Dbwrapper:
 
     @staticmethod
     def addReviewRating(user, review, rating):
-    # Metoda, která nám přidává hodnocení recenze do databáze
+        # Metoda, která nám přidává hodnocení recenze do databáze
         # Potřebujeme znát uživatele, který hodnocení zadal, jakou recenzi ohodnotil a jak ji ohodnotil
         print("Hodnocení recence přidána")
         # Hláška pro kontrolu do konzole
@@ -238,7 +241,7 @@ class Dbwrapper:
             db.session.commit()
             # Záznam zkusíme přidat
         except SQLAlchemyError as e:
-        # Když nastane chyba
+            # Když nastane chyba
             db.session.rollback()
             # Vrácení změn před chybou
             print(e)
@@ -250,7 +253,7 @@ class Dbwrapper:
 
     @staticmethod
     def deleteReviewRating(user, review):
-    # Metoda, kterou mažeme záznam o hodnocení recenze, potřebujeme znát uživatele, který hodnocení zrušil a u jaké recenze toto učinil
+        # Metoda, kterou mažeme záznam o hodnocení recenze, potřebujeme znát uživatele, který hodnocení zrušil a u jaké recenze toto učinil
         query = text("DELETE FROM reviewRatings WHERE user = :user AND review = :review")
         # Dotaz pro databázi, ve kterém mažeme záznam z tabulky databáze "reviewRatings"
         parametres = {"user": user, "review": review}
@@ -260,7 +263,7 @@ class Dbwrapper:
             db.session.commit()
             # Zkusíme záznam vymazat
         except SQLAlchemyError as e:
-        # Když nastane chyba
+            # Když nastane chyba
             db.session.rollback()
             # Vrátíme změny před chybou
             print(e)
@@ -272,7 +275,7 @@ class Dbwrapper:
 
     @staticmethod
     def getReviewRatings(reviewId):
-    # Metoda, pomocí které získáme všechna hodnocení k dané recenzi, tudíž potřebujeme jen Id recenze
+        # Metoda, pomocí které získáme všechna hodnocení k dané recenzi, tudíž potřebujeme jen Id recenze
         query = text("SELECT * FROM reviewRatings WHERE review = :review")
         # Dotaz pro databázi, chceme zvolit všechny hodnocení pro danou recenzi
         parametres = {"review": reviewId}
@@ -282,7 +285,7 @@ class Dbwrapper:
 
     @staticmethod
     def getUserById(id):
-    # Metoda, kterou získáme data o uživateli podle jeho Id, které si do této metody posíláme jako parametr
+        # Metoda, kterou získáme data o uživateli podle jeho Id, které si do této metody posíláme jako parametr
         query = text("SELECT * FROM users WHERE id = :id")
         # Dotaz pro databázi, ve kterém chceme zvolit/najít uživatele podle jeho Id
         parametres = {"id": id}
@@ -292,7 +295,7 @@ class Dbwrapper:
 
     @staticmethod
     def getReviewsByUserId(userId):
-    # Metoda kterou získáme VŠECHNY Recenze daného uživatele, Id uživatele si posíláme jako parametr
+        # Metoda kterou získáme VŠECHNY Recenze daného uživatele, Id uživatele si posíláme jako parametr
         query = text('SELECT * FROM reviews WHERE user = :userId')
         # Dotaz pro databázi, ve kterém chceme zvolit všechny recenze s Id uživatele
         parametres = {"userId": userId}
@@ -302,12 +305,12 @@ class Dbwrapper:
 
     @staticmethod
     def getRatingsByUserId(userId):
-    # Metoda, kterou získáme všechna hodnocení daného uživatele, jeho Id si zde posíláme jako parametr
+        # Metoda, kterou získáme všechna hodnocení daného uživatele, jeho Id si zde posíláme jako parametr
         query = text(
             'SELECT * FROM ratings' +
             ' JOIN films ON films.imdbId = ratings.filmId' +
             ' WHERE userId = :userId' +
-            ' ORDER BY dateTime DESC' )
+            ' ORDER BY dateTime DESC')
         # Dotaz pro databázi, ve kterém chceme zvolit všechny hodnocení uživatele + si podle Id filmu posíláme z databáze "films" informace o filmu
         # Data seřazená podle datumu ohodnocení
         parametres = {"userId": userId}
@@ -317,81 +320,72 @@ class Dbwrapper:
 
     @staticmethod
     def getAllAverageRatings():
+        # Metoda, která nám vrátí průměrné hodnocení TOP 10 filmů - seřazeno
         query = text(
-            '''SELECT filmId, title, year, avg(ratings.rating) AS avgRating, posterImgSrc
-               FROM ratings
-               INNER JOIN films ON ratings.filmId = films.imdbId
-               GROUP BY filmId
-               ORDER BY avgRating DESC
-               LIMIT 10;
-            '''
-        )
+            'SELECT filmId, title, year, avg(ratings.rating) AS avgRating, posterImgSrc FROM ratings ' +
+            'INNER JOIN films ON ratings.filmId = films.imdbId ' +
+            'GROUP BY filmId ' +
+            'ORDER BY avgRating DESC ' +
+            'LIMIT 10')
+        # Vracíme si Id filmu, název, rok vydání, průměrné hodnocení (AS - jako jiný název, v našem případě avgRating), obrázek plakátu
+        # GROUP BY - seskupení řádků podle určitého sloupce, máme kvůli avgRating
+        # ORDER BY - seřaď podle průměrného hodnocení, DESC - descending, sestupně
         return db.session.execute(query).fetchall()
-
-        # group by - seskupení řádků podle určitého sloupce, máme kvůli avgRating
+        # Vykonání dotazi pro databázi
 
     @staticmethod
     def getTOPActiveUsers():
-        query = text('''
-        SELECT users.username, users.id,
-    COALESCE(ratingPoints.points, 0) + COALESCE(reviewPoints.points, 0) + COALESCE(reviewRatingPoints.points, 0) AS totalPoints
-    FROM
-    users
-    LEFT JOIN (
-    SELECT
-        ratings.userId,
-        COUNT(ratings.filmId) * 3 AS points
-    FROM
-        ratings
-    GROUP BY
-        ratings.userId) AS ratingPoints ON users.id = ratingPoints.userId
-    LEFT JOIN (
-    SELECT
-        reviews.user,
-        COUNT(reviews.film) * 8 AS points
-    FROM
-        reviews
-    GROUP BY
-        reviews.user
-    ) AS reviewPoints ON users.id = reviewPoints.user
-    LEFT JOIN (
-    SELECT
-        reviewRatings.user,
-        COUNT(reviewRatings.review) * 1 AS points
-    FROM
-        reviewRatings
-    GROUP BY
-        reviewRatings.user
-    ) AS reviewRatingPoints ON users.id = reviewRatingPoints.user
-    WHERE totalPoints > 0
-    ORDER BY
-    totalPoints DESC
-    LIMIT 10;
-        ''')
+    # Metoda, která nám vrátí TOP 10 nejaktivnějších uživatelů
+        query = text(
+            'SELECT users.username, users.id, COALESCE(ratingPoints.points, 0) + COALESCE(reviewPoints.points, 0) + COALESCE(reviewRatingPoints.points, 0) AS totalPoints FROM users ' +
+            'LEFT JOIN (SELECT ratings.userId, COUNT(ratings.filmId) * 3 AS points FROM ratings GROUP BY ratings.userId) AS ratingPoints ON users.id = ratingPoints.userId ' +
+            'LEFT JOIN (SELECT reviews.user, COUNT(reviews.film) * 8 AS points FROM reviews GROUP BY reviews.user) AS reviewPoints ON users.id = reviewPoints.user ' +
+            'LEFT JOIN (SELECT reviewRatings.user, COUNT(reviewRatings.review) * 1 AS points FROM reviewRatings GROUP BY reviewRatings.user) AS reviewRatingPoints ON users.id = reviewRatingPoints.user ' +
+            'WHERE totalPoints > 0 ' +
+            'ORDER BY totalPoints DESC ' +
+            'LIMIT 10')
+        # Tento požadavek v podstatě počítá body aktivity jednotlivých uživatelů a poté nám vrací, uživatelské jméno, id uživatele (abychom mohli udělat odkaz na profil), celkový počet bodů aktivity
+        # Postupně prochází jednotlivé tabulky a počítá v nich, hodnocení, recenze a hodnocení recenze uživatelů
+        # Bodový zisk: hodnocení: 3 body, recenze: 8 bodů, hodnocení recenze: 1 bod
+        # Chceme pouze uživatele, kteří mají aspoň 1 bod (zaznamenali jsme u nich aspoň nějakou aktivitu), respektive více jak 0 bodů
+        # Tyto uživatele si chceme seřadit podle celkového počtu bodů sestupně, od největšího po nejmenší
+        # Tento počet uživatelů limitujeme na 10
         return db.session.execute(query).fetchall()
+        # Provedení dotazu na databázi
 
     @staticmethod
     def getLatestReviews():
-        query = text('''SELECT reviews.id, films.imdbId ,films.title, users.username, films.posterImgSrc, users.id as id_uzivatele
-                        FROM reviews
-                        JOIN films on films.imdbId = reviews.film
-                        JOIN users on users.id = reviews.user
-                        ORDER BY date DESC
-                        LIMIT 10
-                    ''')
+    # Metoda, která nám vrátí nejnovějších 10 recenzí seřazených podle času
+        query = text(
+            'SELECT reviews.id, films.imdbId ,films.title, users.username, films.posterImgSrc, users.id as id_uzivatele FROM reviews ' +
+            'JOIN films on films.imdbId = reviews.film ' +
+            'JOIN users on users.id = reviews.user ' +
+            'ORDER BY date DESC ' +
+            'LIMIT 10')
+        # Vracíme si id recenze, id filmu, název filmu, uživatelské jméno uživatele, plakát, id uživatele jako id_uzivatele (aby se to nepralo)
+        # Id využíváme vždy při vkládání odkazu
+        # Seřadíme podle údaje date, respektive čas vytvoření recenze
+        # Počet limitujeme na 10
         return db.session.execute(query).fetchall()
+        # Provedeme dotaz na databázi
 
     @staticmethod
     def updateUserDescription(userId, description):
-        query = text('''
-        UPDATE users SET description = :description WHERE Id = :userId
-        ''')
+    # Metoda, která nám v databázi aktualizuje popisek uživatele o sobě, přebírá id uživatele a samozřejmě obsah popisku
+        query = text('UPDATE users SET description = :description WHERE Id = :userId')
+        # Připravení dotazu do proměnné
         parametres = {"userId": userId, "description": description}
+        # Uložení parametrů dotazu do proměnné, je to slovník
         try:
             db.session.execute(query, parametres)
             db.session.commit()
+            # Zkusíme vykonat dotaz pro databázi
             return True
+            # Pokud se podaří, vrátíme True
         except SQLAlchemyError as e:
             db.session.rollback()
+            # Pokud nastane chyba, tak vrátíme změny, které jsme před chybou učinili
             print(e)
+            # Chybu si vytisneme do konzole
         return False
+        # V tomto případě vracíme False, aktualizace se nepovedla
