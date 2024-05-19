@@ -380,3 +380,18 @@ class Dbwrapper:
                         LIMIT 10
                     ''')
         return db.session.execute(query).fetchall()
+
+    @staticmethod
+    def updateUserDescription(userId, description):
+        query = text('''
+        UPDATE users SET description = :description WHERE Id = :userId
+        ''')
+        parametres = {"userId": userId, "description": description}
+        try:
+            db.session.execute(query, parametres)
+            db.session.commit()
+            return True
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(e)
+        return False

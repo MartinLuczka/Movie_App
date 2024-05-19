@@ -1,0 +1,43 @@
+{# Import částí, které se budou opakovat na více stránkách#}
+{% include 'reusable/header.html' %}
+{% include 'reusable/nav.html' %}
+{% include 'reusable/SearchBar.html' %}
+{#vložení obsahu dané stránky#}
+<main>
+
+    <form action="/aktualizaceProfilu" method="POST">
+
+        <fieldset>
+            <legend>Profilový obrázek</legend>
+            <label for="profile_picture">Vložení profilového obrázku:</label>
+            <input id = "profile_picture" type="file" name = "profile_picture" accept="image/*">
+        </fieldset>
+
+        <fieldset>
+            <legend>O mně</legend>
+            <label for="user_description">Vložení textu O MNĚ:</label>
+            <textarea name="user_description" id="user_description" cols="30" rows="10"></textarea>
+        </fieldset>
+
+        <fieldset>
+            <legend>Heslo</legend>
+            <label for="new_password">Zadejte nové heslo:</label>
+            <input name="new_password" type="password" id="new_password">
+
+            <label for="new_password_confirm">Zadejte nové heslo znovu:</label>
+            <input name="new_password_confirm" type="password" id="new_password_confirm">
+
+            <label for="current_password">Zadejte staré heslo:</label>
+            <input name="current_password" type="password" id="current_password">
+        </fieldset>
+
+        <fieldset>
+            <label for="">Potvrzení změn:</label>
+            <input type="submit" value="Potvrdit změny">
+        </fieldset>
+
+    </form>
+
+</main>
+
+{% include 'reusable/footer.html' %}

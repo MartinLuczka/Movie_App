@@ -7,6 +7,7 @@
                 {# Provode se, pokud jsou data v session, neboli, když je uživatel přihlášen #}
                 <a href="/user/{{ session["user"]["id"]}}">{{ session["user"]["username"] }}</a>
                 {# Odkaz na profil uživatele podle id v databázi, Klikáme na jméno uživatele #}
+                <br> <a href="/nastaveniProfilu">Nastavení profilu</a>
                 <br> <a href="/odhlaseni">Odhlásit se</a>
                 {# Pokud jsme přihlášeni, už se můžeme jen odhlásit #}
                 {# br dělá nový řádek #}

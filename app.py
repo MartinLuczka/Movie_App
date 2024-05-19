@@ -292,3 +292,27 @@ def jePrihlaseny():
         # Pokud je uživatel v sessionu, tak se vrátí pravda
     return "0"
     # Pokud není přihlášen, tak se vrátí nepravda
+
+@app.route('/nastaveniProfilu', methods = ["GET", "POST"])
+def nastaveniProfilu():
+    return render_template("UserSettings.html", webTitle = "Nastavení profilu")
+
+@app.route('/aktualizaceProfilu', methods = ["GET", "POST"])
+def aktualizaceProfilu():
+    print(request.form)
+    '''uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        print(uploaded_file.filename)
+        uploaded_file.save(uploaded_file.filename)'''
+    if request.form["user_description"] != "":
+        Dbwrapper.updateUserDescription(session["user"]["id"], request.form["user_description"])
+
+
+
+
+
+
+
+
+
+    return redirect('/nastaveniProfilu')

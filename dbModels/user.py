@@ -11,6 +11,8 @@ class User(db.Model): # user - v pythonu chceme pracovat s jedním uživatelem
     # unique - uživ. jméno musí být unikátní, max počet znaků: 45, nullable - Může být nulová hodnota ? - v našem případě nemůže
     password = db.Column(db.String(64), nullable = False)
     # heslo nemusí být unikátní, nesmí být nulové, jeho délka bude 64 znaků - použijeme SHA256
+    image_file_name = db.Column(db.String(100), nullable = False)
+    description = db.Column(db.String(1000), nullable = True)
 
     def __repr__(self):
         return "User " + self.username
