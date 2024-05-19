@@ -329,3 +329,54 @@ class Dbwrapper:
         return db.session.execute(query).fetchall()
 
         # group by - seskupení řádků podle určitého sloupce, máme kvůli avgRating
+
+    @staticmethod
+    def getTOPActiveUsers():
+        query = text('''
+        SELECT users.username, users.id,
+    COALESCE(ratingPoints.points, 0) + COALESCE(reviewPoints.points, 0) + COALESCE(reviewRatingPoints.points, 0) AS totalPoints
+    FROM
+    users
+    LEFT JOIN (
+    SELECT
+        ratings.userId,
+        COUNT(ratings.filmId) * 3 AS points
+    FROM
+        ratings
+    GROUP BY
+        ratings.userId) AS ratingPoints ON users.id = ratingPoints.userId
+    LEFT JOIN (
+    SELECT
+        reviews.user,
+        COUNT(reviews.film) * 8 AS points
+    FROM
+        reviews
+    GROUP BY
+        reviews.user
+    ) AS reviewPoints ON users.id = reviewPoints.user
+    LEFT JOIN (
+    SELECT
+        reviewRatings.user,
+        COUNT(reviewRatings.review) * 1 AS points
+    FROM
+        reviewRatings
+    GROUP BY
+        reviewRatings.user
+    ) AS reviewRatingPoints ON users.id = reviewRatingPoints.user
+    WHERE totalPoints > 0
+    ORDER BY
+    totalPoints DESC
+    LIMIT 10;
+        ''')
+        return db.session.execute(query).fetchall()
+
+    @staticmethod
+    def getLatestReviews():
+        query = text('''SELECT reviews.id, films.imdbId ,films.title, users.username, films.posterImgSrc, users.id as id_uzivatele
+                        FROM reviews
+                        JOIN films on films.imdbId = reviews.film
+                        JOIN users on users.id = reviews.user
+                        ORDER BY date DESC
+                        LIMIT 10
+                    ''')
+        return db.session.execute(query).fetchall()

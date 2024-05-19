@@ -92,7 +92,7 @@
 
             {% for review in allReviews %}
 
-            <li reviewId="{{ review['id'] }}">
+            <li reviewId="{{ review['id'] }}" id = "review{{ review["id"] }}">
 
                     <div>
                         <h3>{{ review.username}}</h3>

@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from flask import Flask, render_template, request, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -31,12 +32,14 @@ with app.app_context():
 @app.route("/")
 def home():
     average_ratings = Dbwrapper.rowsToDict(Dbwrapper.getAllAverageRatings())
+    top_active_users = Dbwrapper.rowsToDict(Dbwrapper.getTOPActiveUsers())
+    # print(json.dumps(top_active_users, indent=4))
+    latest_reviews = Dbwrapper.rowsToDict(Dbwrapper.getLatestReviews())
+    print(json.dumps(latest_reviews, indent=4))
 
 
 
-
-
-    return render_template("HomePage.html", webTitle = "Domovská stránka", average_ratings = average_ratings)
+    return render_template("HomePage.html", webTitle = "Domovská stránka", average_ratings = average_ratings, top_active_users = top_active_users, latest_reviews = latest_reviews)
 # domovská stránka webu
 
 @app.route("/prihlaseni", methods = ["GET", "POST"])
