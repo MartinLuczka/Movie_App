@@ -311,6 +311,7 @@ def nastaveniProfilu():
 def aktualizaceProfilu():
 # Funkce, která se volá pokud potvrdíme změny v nastavení profilu
     print(request.form)
+    print(session)
     # Tiskneme si do konzole
     '''uploaded_file = request.files['file']
     if uploaded_file.filename != '':
@@ -330,8 +331,8 @@ def aktualizaceProfilu():
             # Pokud je některé z těchto polí prázdný
             session["error_message_nastaveniProfilu"] = "Některá z hodnot nebyla zadána."
             # Hláška pro uživatele
-        return redirect('/nastaveniProfilu')
-        # Vrátíme se na route /nastaveniProfilu
+            return redirect('/nastaveniProfilu')
+            # Vrátíme se na route /nastaveniProfilu
     if request.form["new_password"] == request.form["new_password_confirm"]:
     # Pokud se nové heslo shoduje i s potvrzením nového hesla
         if sha256(request.form["current_password"]) == Dbwrapper.getUserById(session["user"]["id"])._asdict()["password"]:
