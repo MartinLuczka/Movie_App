@@ -300,9 +300,12 @@ def jePrihlaseny():
 def nastaveniProfilu():
 # Funkce, která se volá při kliknutí na nastavení profilu
     if "error_message_nastaveniProfilu" not in session:
+    # Pokud není (zatím) žádný Error Message (jako klíč) ve slovníku session
         session["error_message_nastaveniProfilu"] = ""
+        # Tak ho nastav jako prázdný string, nechceme nic vypisovat
     return render_template("UserSettings.html", webTitle = "Nastavení profilu", infoMessage = session["error_message_nastaveniProfilu"], default_description = '' if Dbwrapper.getUserById(session["user"]["id"])._asdict()["description"] is None else Dbwrapper.getUserById(session["user"]["id"])._asdict()["description"])
     # Načteme si HTML, na kterém jsou formuláře spojené s úpravou profilu uživatele
+    # default_description - tato proměnná nám hlídá to, že se nám v obsahu O MNĚ bude zobrazovat současný text a my jen pohodlně můžeme upravit, podmínka je na předejití problémů, kdyby byl popis v databázi jako None - nemělo by se nikdy stát, ale pro jistotu
 
 @app.route('/aktualizaceProfilu', methods = ["GET", "POST"])
 def aktualizaceProfilu():
@@ -316,19 +319,32 @@ def aktualizaceProfilu():
     Dbwrapper.updateUserDescription(session["user"]["id"], request.form["user_description"])
     # Pošleme id uživatele a obsah popisku jako parametry do metody, která provede přepsání v databázi
     if request.form["new_password"] == "" and request.form["new_password_confirm"] == "" and request.form["current_password"] == "":
+    # Pokud každý parametr nového hesla je prázdný string (uživatel nechce měnit heslo)
         session["error_message_nastaveniProfilu"] = ""
+        # Hláška se nastaví jako prazdný string (uživatel nechce nic vyplnit, my mu k tomu nic nevypíšeme)
         return redirect('/nastaveniProfilu')
+        # Vrátíme se na route /nastaveniProfilu
     if request.form["new_password"] != "" or request.form["new_password_confirm"] != "" or request.form["current_password"] != "":
+    # Pokud ne něco zadáno do polí pro změnu hesla
         if request.form["new_password"] == "" or request.form["new_password_confirm"] == "" or request.form["current_password"] == "":
+            # Pokud je některé z těchto polí prázdný
             session["error_message_nastaveniProfilu"] = "Některá z hodnot nebyla zadána."
+            # Hláška pro uživatele
         return redirect('/nastaveniProfilu')
+        # Vrátíme se na route /nastaveniProfilu
     if request.form["new_password"] == request.form["new_password_confirm"]:
+    # Pokud se nové heslo shoduje i s potvrzením nového hesla
         if sha256(request.form["current_password"]) == Dbwrapper.getUserById(session["user"]["id"])._asdict()["password"]:
+        # Pokud zadané staré heslo souhlasí se starým heslem získaným z databáze, ._asdict - metoda - vrátí jako slovník
             Dbwrapper.changeUserPassword(session["user"]["id"], sha256(request.form["new_password"]))
+            # Zapíšeme nové heslo se znalostí id uživatle a samotného nového hesla (zakódovaného samozřejmě)
             session["error_message_nastaveniProfilu"] = "Změna hesla se povedla."
+            # Zpětná vazba pro uživatele
         else:
             session["error_message_nastaveniProfilu"] = "Chybně jste zadali staré heslo."
+            # Hláška pro uživatele, pokud špatně zadal své staré heslo
     else:
         session["error_message_nastaveniProfilu"] = "Nové heslo se neshoduje s heslem, kterým jste nové heslo potvrzovali."
+        # Hláška pro uživatele, pokud špatně zadal potvrzení nového hesla
     return redirect('/nastaveniProfilu')
     # Po provedení přesměrujeme zpátky na nastavení profilu, nebo můžeme třeba přesměrovat na stránku uživatele

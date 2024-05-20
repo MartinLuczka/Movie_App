@@ -392,14 +392,20 @@ class Dbwrapper:
 
     @staticmethod
     def changeUserPassword(userId, new_password):
+    # Metoda, která nám mění heslo uživatele
         query = text('UPDATE users SET password = :new_password WHERE id = :userId')
         parametres = {"userId": userId, "new_password": new_password}
+        # Zadání dotazu a paremetrů pro něj, posíláme Id uživatele (heslo kterého uživatele ?) a také samozřejmě hodnotu daného hesla (jde přes sha256 kódování)
         try:
             db.session.execute(query, parametres)
             db.session.commit()
-            print("heslo přepsáno")
+            # Provedení a poslání změn na databázi
             return True
+            # Pokud se povede, vracíme True
         except SQLAlchemyError as e:
             db.session.rollback()
+            # Pokud nastane chyba, tak vrátíme provedené změny na databázi
             print(e)
+            # Chybu si vytiskneme
         return False
+        # Vracíme False - heslo se neaktualizovalo
