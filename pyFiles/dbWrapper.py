@@ -389,3 +389,17 @@ class Dbwrapper:
             # Chybu si vytisneme do konzole
         return False
         # V tomto případě vracíme False, aktualizace se nepovedla
+
+    @staticmethod
+    def changeUserPassword(userId, new_password):
+        query = text('UPDATE users SET password = :new_password WHERE id = :userId')
+        parametres = {"userId": userId, "new_password": new_password}
+        try:
+            db.session.execute(query, parametres)
+            db.session.commit()
+            print("heslo přepsáno")
+            return True
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(e)
+        return False

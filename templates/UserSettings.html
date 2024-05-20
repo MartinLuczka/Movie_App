@@ -16,7 +16,7 @@
         <fieldset>
             <legend>O mně</legend>
             <label for="user_description">Vložení textu O MNĚ:</label>
-            <textarea name="user_description" id="user_description" cols="30" rows="10"></textarea>
+            <textarea name="user_description" id="user_description" cols="30" rows="10">{{ default_description }}</textarea>
         </fieldset>
 
         <fieldset>
@@ -29,6 +29,7 @@
 
             <label for="current_password">Zadejte staré heslo:</label>
             <input name="current_password" type="password" id="current_password">
+            <p>{{ infoMessage }}</p>
         </fieldset>
 
         <fieldset>

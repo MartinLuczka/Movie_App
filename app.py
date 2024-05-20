@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 from dbModels.Models import db
+from pyFiles.Encoder import sha256
 from pyFiles.UserController import login, signup
 from pyFiles.dbWrapper import Dbwrapper
 from pyFiles.GetData import findDirector, findActors
@@ -298,7 +299,9 @@ def jePrihlaseny():
 @app.route('/nastaveniProfilu', methods = ["GET", "POST"])
 def nastaveniProfilu():
 # Funkce, která se volá při kliknutí na nastavení profilu
-    return render_template("UserSettings.html", webTitle = "Nastavení profilu")
+    if "error_message_nastaveniProfilu" not in session:
+        session["error_message_nastaveniProfilu"] = ""
+    return render_template("UserSettings.html", webTitle = "Nastavení profilu", infoMessage = session["error_message_nastaveniProfilu"], default_description = '' if Dbwrapper.getUserById(session["user"]["id"])._asdict()["description"] is None else Dbwrapper.getUserById(session["user"]["id"])._asdict()["description"])
     # Načteme si HTML, na kterém jsou formuláře spojené s úpravou profilu uživatele
 
 @app.route('/aktualizaceProfilu', methods = ["GET", "POST"])
@@ -310,9 +313,22 @@ def aktualizaceProfilu():
     if uploaded_file.filename != '':
         print(uploaded_file.filename)
         uploaded_file.save(uploaded_file.filename)'''
-    if request.form["user_description"] != "":
-    # Pokud string, který mění popis uživatele není nulový
-        Dbwrapper.updateUserDescription(session["user"]["id"], request.form["user_description"])
-        # Pošleme id uživatele a obsah popisku jako parametry do metody, která provede přepsání v databázi
+    Dbwrapper.updateUserDescription(session["user"]["id"], request.form["user_description"])
+    # Pošleme id uživatele a obsah popisku jako parametry do metody, která provede přepsání v databázi
+    if request.form["new_password"] == "" and request.form["new_password_confirm"] == "" and request.form["current_password"] == "":
+        session["error_message_nastaveniProfilu"] = ""
+        return redirect('/nastaveniProfilu')
+    if request.form["new_password"] != "" or request.form["new_password_confirm"] != "" or request.form["current_password"] != "":
+        if request.form["new_password"] == "" or request.form["new_password_confirm"] == "" or request.form["current_password"] == "":
+            session["error_message_nastaveniProfilu"] = "Některá z hodnot nebyla zadána."
+        return redirect('/nastaveniProfilu')
+    if request.form["new_password"] == request.form["new_password_confirm"]:
+        if sha256(request.form["current_password"]) == Dbwrapper.getUserById(session["user"]["id"])._asdict()["password"]:
+            Dbwrapper.changeUserPassword(session["user"]["id"], sha256(request.form["new_password"]))
+            session["error_message_nastaveniProfilu"] = "Změna hesla se povedla."
+        else:
+            session["error_message_nastaveniProfilu"] = "Chybně jste zadali staré heslo."
+    else:
+        session["error_message_nastaveniProfilu"] = "Nové heslo se neshoduje s heslem, kterým jste nové heslo potvrzovali."
     return redirect('/nastaveniProfilu')
     # Po provedení přesměrujeme zpátky na nastavení profilu, nebo můžeme třeba přesměrovat na stránku uživatele
