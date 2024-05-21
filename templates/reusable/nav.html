@@ -1,21 +1,21 @@
-<nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <ul>
-        <li><a href="/">Domovská stránka</a></li>
+        <li><a class="navbar-brand" href="/">Domovská stránka</a></li>
         {# Odkaz na domovskou stránku, chceme v každém případě #}
         <li>
             {% if session["user"] %}
                 {# Provode se, pokud jsou data v session, neboli, když je uživatel přihlášen #}
-                <a href="/user/{{ session["user"]["id"]}}">{{ session["user"]["username"] }}</a>
+                <a class="navbar-brand" href="/user/{{ session["user"]["id"]}}">{{ session["user"]["username"] }}</a>
                 {# Odkaz na profil uživatele podle id v databázi, Klikáme na jméno uživatele #}
-                <br> <a href="/nastaveniProfilu">Nastavení profilu</a>
-                <br> <a href="/odhlaseni">Odhlásit se</a>
+                <br> <a class="navbar-brand" href="/nastaveniProfilu">Nastavení profilu</a>
+                <br> <a class="navbar-brand" href="/odhlaseni">Odhlásit se</a>
                 {# Pokud jsme přihlášeni, už se můžeme jen odhlásit #}
                 {# br dělá nový řádek #}
             {% else %}
             {# Pokud nejsme přihlášeni, provede se tato část kódu #}
-                <a href="/prihlaseni">Přihlásit se</a>
+                <a class="navbar-brand" href="/prihlaseni">Přihlásit se</a>
                 {# Zobrazení možnosti přihlášení #}
-                <a href="/registrace">Zaregistrovat se</a>
+                <a class="navbar-brand" href="/registrace">Zaregistrovat se</a>
                 {# Zobrazení možnosti odhlášení #}
             {% endif %}
             {# Ukončení podmínky #}
