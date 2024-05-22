@@ -7,15 +7,24 @@
 
 {# Vytvoření formuláře, post - posíláme zadaná data na URL adresu #}
 <form action="" method="post">
+        <div class="form-group mt-5 mb-3 text-center">
+            <label class="font-weight-bold" for="username">Přihlašovací jméno</label>
+        </div>
+        <div class="form-group ms-5 me-5">
+            <input class="form-control" type="text" name="username" id="username" required>
+        </div>
 
-        <label for="username">Přihlašovací jméno</label>
-        <input type="text" name="username" id="username" required>
+        <div class="form-group mt-3 mb-3 text-center">
+            <label for="password">Heslo</label>
+        </div>
+        <div class="form-group ms-5 me-5">
+            <input class="form-control" type="password" name="password" id="password" required> {# required - uživatel nemůže formulář poslat prázdný#}
+            {# Password - typ inputy, heslo je schované za "hvězdičkama", automaticky ukázání#}
+        </div>
 
-        <label for="password">Heslo</label>
-        <input type="password" name="password" id="password" required> {# required - uživatel nemůže formulář poslat prázdný#}
-        {# Password - typ inputy, heslo je schované za "hvězdičkama", automaticky ukázání#}
-
-        <input type="submit" value="Přihlásit se"> {# Submit - pošli formulář, value - text na tlačítku #}
+        <div class="form-group mt-5 mb-3 ms-5 me-5 text-center">
+            <input class="form-control" type="submit" value="Přihlásit se"> {# Submit - pošli formulář, value - text na tlačítku #}
+        </div>
 
     </form>
 
