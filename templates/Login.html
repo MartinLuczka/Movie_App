@@ -8,27 +8,33 @@
 {# Vytvoření formuláře, post - posíláme zadaná data na URL adresu #}
 <form action="" method="post">
         <div class="form-group mt-5 mb-3 text-center">
-            <label class="font-weight-bold" for="username">Přihlašovací jméno</label>
+            <label for="username"><strong>Přihlašovací jméno</strong></label>
         </div>
-        <div class="form-group ms-5 me-5">
-            <input class="form-control" type="text" name="username" id="username" required>
+        <div class="row form-group ms-5 me-5">
+            <div class="col-md-5"></div>
+            <input class="col-md-2" type="text" name="username" id="username" required>
+            <div class="col-md-5"></div>
         </div>
 
         <div class="form-group mt-3 mb-3 text-center">
-            <label for="password">Heslo</label>
+            <label for="password"><strong>Heslo</strong></label>
         </div>
-        <div class="form-group ms-5 me-5">
-            <input class="form-control" type="password" name="password" id="password" required> {# required - uživatel nemůže formulář poslat prázdný#}
+        <div class="row form-group ms-5 me-5">
+            <div class="col-md-5"></div>
+            <input class="col-md-2" type="password" name="password" id="password" required> {# required - uživatel nemůže formulář poslat prázdný#}
             {# Password - typ inputy, heslo je schované za "hvězdičkama", automaticky ukázání#}
+            <div class="col-md-5"></div>
         </div>
 
-        <div class="form-group mt-5 mb-3 ms-5 me-5 text-center">
-            <input class="form-control" type="submit" value="Přihlásit se"> {# Submit - pošli formulář, value - text na tlačítku #}
+        <div class="row form-group mt-3 mb-5 ms-5 me-5 text-center">
+            <div class="col-md-5"></div>
+            <input class="col-md-2" type="submit" value="Přihlásit se"> {# Submit - pošli formulář, value - text na tlačítku #}
+            <div class="col-md-5"></div>
         </div>
 
     </form>
 
-<p>{{ infoMessage }}</p>
+<p class="text-center text-uppercase"><strong>{{ infoMessage }}</strong></p>
 {# Zobrazení hlášky podle výsledku přihlášení #}
 
 </main>
