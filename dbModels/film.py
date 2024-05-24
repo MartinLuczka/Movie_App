@@ -10,7 +10,7 @@ class Film(db.Model):
     # název filmu, musí být unikátní, nesmí být nenulový
     year = db.Column(db.Integer,  nullable=False)
     # rok vydání filmu, nesmí být nenulový
-    rating = db.Column(db.Float,  nullable=False)
+    imdbRating = db.Column(db.Float,  nullable=False)
     # hodnocení z IMBD, nesmí být nenulové
 
     director = db.Column(db.JSON)

@@ -5,12 +5,12 @@
 {#vložení obsahu dané stránky#}
 <main>
 
-    <form action="/aktualizaceProfilu" method="POST">
+    <form action="/aktualizaceProfilu" method="POST" enctype="multipart/form-data">
 
         <fieldset>
             <legend>Profilový obrázek</legend>
             <label for="profile_picture">Vložení profilového obrázku:</label>
-            <input id = "profile_picture" type="file" name = "profile_picture" accept="image/*">
+            <input id = "profile_picture" type="file" name = "profile_picture" accept=".png,.jpg,.jpeg">
         </fieldset>
 
         <fieldset>

@@ -10,14 +10,15 @@ class Dbwrapper:
     # Definice třídy Dbwrapper pro práci s databází
 
     @staticmethod
-    def getFilmbyPartOfTitle(partOfTitle):
-        # Statická metoda pro získání filmů podle části jejich názvu
+    def getFilmbyPartOfTitle(partOfTitle, limit):
+        # Statická metoda pro získání filmů podle části jejich názvu + max. počet vrácených výsledek (kvůli zobrazení), můžeme popřípadě manuálně změnit
         query = text(
             'SELECT * FROM films WHERE title LIKE \'%\' || :title || \'%\''
-            'ORDER BY rating DESC'
+            'ORDER BY imdbRating DESC '
+            'LIMIT :limit'
         )
-        # Sestavení SQL dotazu pomocí SQLAlchemy objektu text
-        parametres = {"title": partOfTitle}
+        # Sestavení SQL dotazu pomocí SQLAlchemy objektu text, seřazujeme sestupně podle Imdb hodnocení
+        parametres = {"title": partOfTitle, "limit": limit}
         # Parametry pro dotaz - část názvu filmu
         return db.session.execute(query, parametres).fetchall()
         # fetchall - protože chceme všechny filmy, které vyhovují naším podmínkám
@@ -296,8 +297,11 @@ class Dbwrapper:
     @staticmethod
     def getReviewsByUserId(userId):
         # Metoda kterou získáme VŠECHNY Recenze daného uživatele, Id uživatele si posíláme jako parametr
-        query = text('SELECT * FROM reviews WHERE user = :userId')
-        # Dotaz pro databázi, ve kterém chceme zvolit všechny recenze s Id uživatele
+        query = text('SELECT * FROM reviews ' +
+                     'JOIN films ON films.ImdbId = reviews.film ' +
+                     'WHERE user = :userId '
+                     )
+        # Dotaz pro databázi, ve kterém chceme zvolit všechny recenze s Id uživatele + připojení tabulky s informacemi o daných filmech podle id filmu
         parametres = {"userId": userId}
         # Zadání parametrů pro dotaz
         return db.session.execute(query, parametres).fetchall()
@@ -322,16 +326,30 @@ class Dbwrapper:
     def getAllAverageRatings():
         # Metoda, která nám vrátí průměrné hodnocení TOP 10 filmů - seřazeno
         query = text(
-            'SELECT filmId, title, year, avg(ratings.rating) AS avgRating, posterImgSrc FROM ratings ' +
+            'SELECT filmId, title, year, round(avg(ratings.rating), 1) AS avgRating, posterImgSrc FROM ratings ' +
             'INNER JOIN films ON ratings.filmId = films.imdbId ' +
             'GROUP BY filmId ' +
             'ORDER BY avgRating DESC ' +
             'LIMIT 10')
-        # Vracíme si Id filmu, název, rok vydání, průměrné hodnocení (AS - jako jiný název, v našem případě avgRating), obrázek plakátu
+        # Vracíme si Id filmu, název, rok vydání, průměrné hodnocení (AS - jako jiný název, v našem případě avgRating) - zaok. na 1 des. místo, obrázek plakátu
         # GROUP BY - seskupení řádků podle určitého sloupce, máme kvůli avgRating
         # ORDER BY - seřaď podle průměrného hodnocení, DESC - descending, sestupně
         return db.session.execute(query).fetchall()
         # Vykonání dotazi pro databázi
+
+    @staticmethod
+    def getAverageRating(filmId):
+    # Metoda, která nám vrátí průměrné hodnocení daného filmu
+        query = text(
+            'SELECT round(avg(ratings.rating), 1) AS avgRating FROM ratings ' +
+            'WHERE filmId = :filmId ' +
+            'GROUP BY filmId '
+        )
+        # Dotaz pro databázi, od databáze chceme spočítat hodnoty všech hodnocení k danému filmu a zprůměrovat je + zaokrouhlení pro vhodné zobrazení
+        parametres = {"filmId": filmId}
+        # Parametry pro dotaz
+        return db.session.execute(query, parametres).fetchone()
+        # Vykonání dotazu
 
     @staticmethod
     def getTOPActiveUsers():

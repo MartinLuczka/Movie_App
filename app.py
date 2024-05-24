@@ -1,5 +1,7 @@
 import datetime
 import json
+import os
+import shutil
 
 from flask import Flask, render_template, request, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -88,7 +90,8 @@ def registrace():
 def searchBarProcess():
     val = request.json["val"]
     # Z requestu uděláme json formát a vezmeme si z něj hodnotu val (text v searchBaru)
-    films = Dbwrapper.getFilmbyPartOfTitle(val)
+    films = Dbwrapper.getFilmbyPartOfTitle(val, 20)
+    # 20 - limit počtu filmů, které databáze vrátí
     # Volání metody Dbwrapper.getFilmbyPartOfTitle pro vyhledání filmů podle části názvu
     films = Dbwrapper.rowsToDict(films)
     # Převedení výsledků (seznamu řádků) na seznam slovníků pomocí metody rowsToDict
@@ -107,13 +110,18 @@ def userPage(id):
         usersReviews = None
         # Nastavení proměnných do počátečních hodnot
         try:
-            usersRatings = Dbwrapper.getRatingsByUserId(id)
+            usersRatings = Dbwrapper.rowsToDict(Dbwrapper.getRatingsByUserId(id))
             # Uživatelovi hodnocení si zkusíme uložit do proměnné
+            for rating in usersRatings:
+                print(rating)
         except Exception as e:
             print(e)
             # Pokud se vyskytne vyjímka, tak si ji budeme chtít zobrazit v konzoli
         try:
-            usersReviews = Dbwrapper.getReviewsByUserId(id)
+            usersReviews = Dbwrapper.rowsToDict(Dbwrapper.getReviewsByUserId(id))
+            print(json.dumps(usersReviews, indent=4))
+            for review in usersReviews:
+                print(review)
             # Uživatelovi recenze si zkusíme uložit do proměnné
         except Exception as e:
             print(e)
@@ -134,6 +142,8 @@ def filmPage(filmId):
     # Získáme všechny recenze daného filmu
     film = Dbwrapper.getFilmById(filmId)
     # Získání informací o konkrétním filmu podle jeho IMDb ID
+    avg_rating = Dbwrapper.getAverageRating(filmId)
+    # Získání průměrného hodnocení daného filmu - hodnocení na naší strance podle našich uživatelů
     rating = 0
     # Základní hodnota hodnocení je 0
     user = False
@@ -217,7 +227,7 @@ def filmPage(filmId):
 
     if film:
     # Pokud film existuje (nachází se v databázi)
-        return render_template( 'film.html', film=film, userRating=rating, user=user, userReview=usersReview, allReviews = allReviewsWithoutLoggedinUser, director_name = director_name, actors = actors)
+        return render_template( 'film.html', film=film, userRating=rating, user=user, userReview=usersReview, allReviews = allReviewsWithoutLoggedinUser, director_name = director_name, actors = actors, avg_rating = avg_rating)
         # Vygenerování HTML stránky s informacemi o filmu a zobrazením hodnocení uživatele
     return render_template("film.html", errorMessage = "Film not found")
     # Pokud se stránka s filmem nenajde, tak zahlásíme error
@@ -312,11 +322,21 @@ def aktualizaceProfilu():
 # Funkce, která se volá pokud potvrdíme změny v nastavení profilu
     print(request.form)
     print(session)
+    print(request.files)
     # Tiskneme si do konzole
-    '''uploaded_file = request.files['file']
-    if uploaded_file.filename != '':
-        print(uploaded_file.filename)
-        uploaded_file.save(uploaded_file.filename)'''
+    if 'profile_picture' in request.files:
+    # Pokud je profilová fotka mezi tím, co se poslalo se submitu dotazníku na webové stránce
+        file = request.files['profile_picture']
+        # fotku si uložíme do proměnné
+        if file.filename == '':
+            print('Nebyl zvolen soubor')
+            # Hláška pro info do konzole
+        # "Bezpečnostní" podmínka pro případ, že by soubor neměl název (nemělo by nastat)
+        else:
+            file.save(f"{os.getcwd()}/static/imgs/profile_pictures/{session["user"]["id"]}.png")
+            # Fotku ulož jako png obrázek a pojmenuj podle ID uživatele
+            print('Obrázek úspěšně uložen')
+            # Hláška pro info do konzole
     Dbwrapper.updateUserDescription(session["user"]["id"], request.form["user_description"])
     # Pošleme id uživatele a obsah popisku jako parametry do metody, která provede přepsání v databázi
     if request.form["new_password"] == "" and request.form["new_password_confirm"] == "" and request.form["current_password"] == "":

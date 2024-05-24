@@ -4,10 +4,71 @@
 {% include 'reusable/SearchBar.html' %}
 {#vložení obsahu dané stránky#}
 <main>
-<h1>{{ user }}</h1> <br>
-{{ usersRatings }} <br>
-{{ usersReviews }} <br>
-{{ errorMessage }} <br>
+<h1>{{ user.username }}</h1>
+
+    <img width="300px" src="../static/imgs/profile_pictures/{{ user.id }}.png" alt="Profilový obrázek">
+
+    <h2>Hodnocení uživatele:</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Plakát
+                </th>
+                <th>
+                    Název filmu
+                </th>
+                <th>
+                    Rok vydání
+                </th>
+                <th>
+                    Hodnocení
+                </th>
+                <th>
+                    Datum hodnocení
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rating in usersRatings %}
+            <tr>
+                <td>
+                    <img height="200px" src="{{ rating["posterImgSrc"] }}" alt="Plakát filmu">
+                </td>
+                <td>
+                    <h3><a href="/film/{{ rating["filmId"] }}">{{ rating["title"] }}</a></h3>
+                </td>
+                <td>
+                    <h3>{{ rating["year"] }}</h3>
+                </td>
+                <td>
+                    <h3>{{ rating["rating"] }}</h3>
+                </td>
+                <td>
+                    <h3>{{ rating["dateTime"] }}</h3>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+    <h2>Recenze uživatele:</h2>
+
+    {% for review in usersReviews %}
+        <div><h1>{{ review["title"] }} ({{ review["year"] }})</h1></div>
+        <div class="row">
+            <div class="col-md-2"><img height="200px" src="{{ review["posterImgSrc"] }}" alt="Plakát filmu"></div>
+            <div class="col-md-10">
+                <h5>Datum zveřejnění recenze: {{ review["date"] }}</h5>
+                <p><h3>{{ review["content"] }}</h3></p>
+            </div>
+        </div>
+
+    {% endfor %}
+
+    {{ errorMessage }} <br>
 
 </main>
 

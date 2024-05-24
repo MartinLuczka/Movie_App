@@ -28,7 +28,9 @@
     
         </div>
     
-    <h2>Hodnocení na IMBd: {{ film["rating"] }}</h2>
+    <h2>Hodnocení na IMBd: {{ film["imdbRating"] }}</h2>
+
+    <h2>Hodnocení na tomto webu: {{ avg_rating["avgRating"] }}</h2>
     
     <h3>Režisér filmu: {{ director_name }}</h3>
     {# Zeptat se chata, jak dostat informace z json #}
