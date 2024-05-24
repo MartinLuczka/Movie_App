@@ -4,101 +4,111 @@
 {% include 'reusable/SearchBar.html' %}
 {#vložení obsahu dané stránky#}
 <main>
-
-    <table id = "TopAverageRatings">
-        <thead>
-            <tr>
-                <th>
-                    Plakát
-                </th>
-                <th>
-                    Název
-                </th>
-                <th>
-                    Rok
-                </th>
-                <th>
-                    Hodnocení
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for average_rating in average_ratings %}
-        	<tr>
-                <td>
-                    <img height="200px" src="{{ average_rating["posterImgSrc"] }}" alt="Plakát filmu">
-                </td>
-                <td>
-                    <h3><a href="/film/{{ average_rating["filmId"] }}">{{ average_rating["title"] }}</a></h3>
-                </td>
-                <td>
-                    <h3>{{ average_rating["year"] }}</h3>
-                </td>
-                <td>
-                    <h3>{{ average_rating["avgRating"] }}</h3>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <table id = "TopActiveUsers">
-        <thead>
-            <tr>
-                <th>
-                    Jméno uživatele
-                </th>
-                <th>
-                    Počet bodů aktivity
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for active_user in top_active_users %}
-            	<tr>
+<div class="row">
+    <div class="col-md-4">
+        <h2 class="text-center mt-4 mb-4"><strong>Nejlepší filmy webu</strong></h2>
+        <table id = "TopAverageRatings" class="ms-4 me-4">
+            <thead>
+                <tr>
+                    <th>
+                        Plakát
+                    </th>
+                    <th>
+                        Název
+                    </th>
+                    <th>
+                        Rok
+                    </th>
+                    <th>
+                        Hodnocení
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for average_rating in average_ratings %}
+                <tr>
                     <td>
-                        <a href="/user/{{ active_user["id"] }}"><h3>{{ active_user["username"] }}</h3></a>
+                        <img height="200px" src="{{ average_rating["posterImgSrc"] }}" alt="Plakát filmu">
                     </td>
                     <td>
-                        <h3>{{ active_user["totalPoints"] }}</h3>
+                        <h3><a href="/film/{{ average_rating["filmId"] }}">{{ average_rating["title"] }}</a></h3>
+                    </td>
+                    <td>
+                        <h3>{{ average_rating["year"] }}</h3>
+                    </td>
+                    <td>
+                        <h3>{{ average_rating["avgRating"] }}</h3>
                     </td>
                 </tr>
             {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-        </tbody>
-    </table>
-
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    Plakát
-                </th>
-                <th>
-                    Název filmu
-                </th>
-                <th>
-                    Jméno uživatele
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for latest_review in latest_reviews %}
-            	<tr>
-                    <td>
-                        <img height="200px" src="{{ latest_review["posterImgSrc"] }}" alt="Plakát filmu">
-                    </td>
-                    <td>
-                        <a href="/film/{{ latest_review["imdbId"] }}#review{{ latest_review["id"] }}"><h2>{{ latest_review["title"] }}</h2></a>
-                    </td>
-                    <td>
-                        <a href="/user/{{ latest_review["id_uzivatele"] }}"><h3>{{ latest_review["username"] }}</h3></a>
-                    </td>
+    <div class="col-md-4">
+        <h2 class="text-center mt-4 mb-4"><strong>Nejaktivnější uživatelé</strong></h2>
+        <table id = "TopActiveUsers">
+            <thead>
+                <tr>
+                    <th>
+                        Jméno uživatele
+                    </th>
+                    <th>
+                        Počet bodů aktivity
+                    </th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for active_user in top_active_users %}
+                    <tr>
+                        <td>
+                            <a href="/user/{{ active_user["id"] }}"><h3>{{ active_user["username"] }}</h3></a>
+                        </td>
+                        <td>
+                            <h3>{{ active_user["totalPoints"] }}</h3>
+                        </td>
+                    </tr>
+                {% endfor %}
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <h2 class="text-center mt-4 mb-4"><strong>Nedávné recenze</strong></h2>
+        <table id = "MostRecentReviews" class="ms-4 me-4">
+            <thead>
+                <tr>
+                    <th>
+                        Plakát
+                    </th>
+                    <th>
+                        Název filmu
+                    </th>
+                    <th>
+                        Jméno uživatele
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for latest_review in latest_reviews %}
+                    <tr>
+                        <td>
+                            <img height="200px" src="{{ latest_review["posterImgSrc"] }}" alt="Plakát filmu">
+                        </td>
+                        <td>
+                            <a href="/film/{{ latest_review["imdbId"] }}#review{{ latest_review["id"] }}"><h2>{{ latest_review["title"] }}</h2></a>
+                        </td>
+                        <td>
+                            <a href="/user/{{ latest_review["id_uzivatele"] }}"><h3>{{ latest_review["username"] }}</h3></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+    </div>
 
 </main>
 
