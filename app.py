@@ -39,6 +39,7 @@ def home():
     average_ratings = Dbwrapper.rowsToDict(Dbwrapper.getAllAverageRatings())
     # Získáme TOP 10 nejlépe hodnocených filmů na naší stránce, pracujeme dále se slovníkem
     top_active_users = Dbwrapper.rowsToDict(Dbwrapper.getTOPActiveUsers())
+    print(top_active_users)
     # Získáme TOP 10 nejaktivnějších uživatelů na naší stránce, pracujeme dále se slovníkem
     # print(json.dumps(top_active_users, indent=4))
     latest_reviews = Dbwrapper.rowsToDict(Dbwrapper.getLatestReviews())

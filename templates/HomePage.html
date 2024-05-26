@@ -3,41 +3,49 @@
 {% include 'reusable/nav.html' %}
 {% include 'reusable/SearchBar.html' %}
 {#vložení obsahu dané stránky#}
-<main>
-<div class="row">
+<main style="width: 97%;">
+<div class="row mb-5">
     <div class="col-md-4">
         <h2 class="text-center mt-4 mb-4"><strong>Nejlepší filmy webu</strong></h2>
-        <table id = "TopAverageRatings" class="ms-4 me-4">
-            <thead>
+        <table id = "TopAverageRatings" class="ms-4 me-4 w-100">
+            <thead class="bg-primary text-white">
                 <tr>
-                    <th>
-                        Plakát
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Plakát</h5>
                     </th>
-                    <th>
-                        Název
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Název</h5>
                     </th>
-                    <th>
-                        Rok
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Rok</h5>
                     </th>
-                    <th>
-                        Hodnocení
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Hodnocení</h5>
                     </th>
                 </tr>
             </thead>
             <tbody>
             {% for average_rating in average_ratings %}
                 <tr>
-                    <td>
-                        <img height="200px" src="{{ average_rating["posterImgSrc"] }}" alt="Plakát filmu">
+                    <td style="width: 140px">
+                        <div class="mt-3 text-center">
+                            <img height="200px" src="{{ average_rating["posterImgSrc"] }}" alt="Plakát filmu">
+                        </div>
+                    </td>
+                    <td style="width: 250px">
+                        <div class="mt-3 text-center">
+                            <h3><a href="/film/{{ average_rating["filmId"] }}">{{ average_rating["title"] }}</a></h3>
+                        </div>
                     </td>
                     <td>
-                        <h3><a href="/film/{{ average_rating["filmId"] }}">{{ average_rating["title"] }}</a></h3>
+                        <div class="mt-3 text-center">
+                            <h3>{{ average_rating["year"] }}</h3>
+                        </div>
                     </td>
-                    <td>
-                        <h3>{{ average_rating["year"] }}</h3>
-                    </td>
-                    <td>
-                        <h3>{{ average_rating["avgRating"] }}</h3>
+                    <td class="text-danger">
+                        <div class="mt-3 text-center">
+                            <h3>{{ average_rating["avgRating"] }}</h3>
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
@@ -47,24 +55,32 @@
 
     <div class="col-md-4">
         <h2 class="text-center mt-4 mb-4"><strong>Nejaktivnější uživatelé</strong></h2>
-        <table id = "TopActiveUsers">
-            <thead>
+        <table class="ms-4 me-4 w-100" id = "TopActiveUsers">
+            <thead class="bg-primary text-white">
                 <tr>
-                    <th>
-                        Jméno uživatele
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Profilový obrázek</h5>
                     </th>
-                    <th>
-                        Počet bodů aktivity
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Jméno uživatele</h5>
+                    </th>
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Počet bodů aktivity</h5>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {% for active_user in top_active_users %}
                     <tr>
-                        <td>
+                        <td class="text-center mb-3 mt-3">
+                            <div class="mt-3 text-center">
+                                <img width="150px" src="../static/imgs/profile_pictures/{{ active_user.id }}.png" alt="Profilový obrázek uživatele">
+                            </div>
+                        </td>
+                        <td class="text-center mb-3 mt-3">
                             <a href="/user/{{ active_user["id"] }}"><h3>{{ active_user["username"] }}</h3></a>
                         </td>
-                        <td>
+                        <td class="text-danger text-center mb-3 mt-3">
                             <h3>{{ active_user["totalPoints"] }}</h3>
                         </td>
                     </tr>
@@ -76,30 +92,32 @@
 
     <div class="col-md-4">
         <h2 class="text-center mt-4 mb-4"><strong>Nedávné recenze</strong></h2>
-        <table id = "MostRecentReviews" class="ms-4 me-4">
-            <thead>
+        <table id = "MostRecentReviews" class="ms-4 me-4 w-100">
+            <thead class="bg-primary text-white">
                 <tr>
-                    <th>
-                        Plakát
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Plakát</h5>
                     </th>
-                    <th>
-                        Název filmu
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Název filmu</h5>
                     </th>
-                    <th>
-                        Jméno uživatele
+                    <th class="text-center mb-3 mt-3">
+                        <h5 class="mt-1">Jméno uživatele</h5>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {% for latest_review in latest_reviews %}
                     <tr>
-                        <td>
-                            <img height="200px" src="{{ latest_review["posterImgSrc"] }}" alt="Plakát filmu">
+                        <td style="width: 140px" class="text-center mb-3 mt-3">
+                            <div class="mt-3 text-center">
+                                <img height="200px" src="{{ latest_review["posterImgSrc"] }}" alt="Plakát filmu">
+                            </div>
                         </td>
-                        <td>
+                        <td style="width: 250px;" class="text-center mb-3 mt-3">
                             <a href="/film/{{ latest_review["imdbId"] }}#review{{ latest_review["id"] }}"><h2>{{ latest_review["title"] }}</h2></a>
                         </td>
-                        <td>
+                        <td class="text-center mb-3 mt-3">
                             <a href="/user/{{ latest_review["id_uzivatele"] }}"><h3>{{ latest_review["username"] }}</h3></a>
                         </td>
                     </tr>
