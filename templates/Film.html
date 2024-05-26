@@ -9,118 +9,150 @@
 
 {% if film %}
 
-<main filmId="{{ film['imdbId'] }}">
+<main style="width: 97%;" filmId="{{ film['imdbId'] }}">
 
-    <h1>Název filmu: {{ film["title"] }}</h1>
-    
-    <h2>Rok vydání: {{ film["year"] }}</h2>
-    
-    <div id="ratingDiv" defaultUserRating="{{ userRating }}">
-    
-            {% for i in range(10) %}
-    
-                {% if i <= userRating - 1 %}
-                    <img src="../static/imgs/full.png" alt="" order="{{i+1}}">
-                {% else %}
-                    <img src="../static/imgs/empty.png" alt="" order="{{i+1}}">
-                {% endif %}
-            {% endfor %}
-    
+    <div class="text-center mt-4 mb-4">
+        <h1><strong>{{ film["title"] }} ({{ film["year"] }})</strong></h1>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-3 text-end">
+            <img src="{{ film["posterImgSrc"] }}" alt="Plakát filmu {{ film["title"] }}" width="300">
         </div>
-    
-    <h2>Hodnocení na IMBd: {{ film["imdbRating"] }}</h2>
 
-    <h2>Hodnocení na tomto webu: {{ avg_rating["avgRating"] }}</h2>
-    
-    <h3>Režisér filmu: {{ director_name }}</h3>
-    {# Zeptat se chata, jak dostat informace z json #}
-    
-    <h3>Herci ve filmu: {% for actor in actors %}
-        <p>{{ actor }}</p>
-        {% endfor %}
-    </h3>
-    
-    <h3>Popis filmu: {{ film["description"] }}</h3>
-    
-    <h2>Plakát k filmu:</h2>
-    
-    <img src="{{ film["posterImgSrc"] }}" alt="Plakát filmu {{ film["title"] }}" width="300">
-    
-        <br>
-    
-    <h2>Trailer k filmu:</h2>
-
-    <iframe width="640" height="360"
-        src="{{ film["trailerUrl"] }}">
-    </iframe>
-    
-    <div id = "reviewsDiv">
-
-        {% if user %}
-
-            {% if userReview %}
-
-                <div>
-                    <p>Recenze uživatele:</p>
-                    <div>
-                        <p>{{ userReview.content }}</p>
-                        <h5>{{ userReview.date }}</h5>
-                        <div class="thumbsDiv" thumbsRating="{{ userReview['logedinUsersReviewRating'] }}">
-                            <h5 style="display: inline;" class="thumbsup">{{ userReview['reviewRatings']['thumbsup'] }}</h5>
-                            <img src="../static/imgs/thumb_up_full.png" alt = "Vybarvený palec nahoru">
-                            <h5 style="display: inline;" class="thumbsdown">{{ userReview['reviewRatings']['thumbsdown'] }}</h5>
-                            <img src="../static/imgs/thumb_down_full.png" alt="Vybarvený palec dolů">
-                        </div>
-                    <h3>{{ userReview }}</h3>
-                    <form action="/deleteReview" method="post"><input type="hidden" name="reviewId" value="{{ userReview.id }}"><input type="submit" value="Odstranit"></form>
+        <div class="col-md-5">
+            <h3>Režisér filmu: <strong>{{ director_name }}</strong></h3>
+            <div class="d-flex">
+                <h3 class="me-2 mt-2">Herci ve filmu:</h3>
+                <div class="mt-2">
+                    {% for actor in actors %}
+                    <h3 class="mb-2"><strong>{{ actor }}</strong></h3>
+                    {% endfor %}
                 </div>
+            </div>
+        </div>
 
-            {% else %}
+        <div class="col-md-4 d-flex flex-column align-items-center">
+            <div>
+                <h3><strong>Vaše hodnocení:</strong></h3>
+            </div>
 
-                <form action="/addReview" method="post">
+            <div class="mt-3" id="ratingDiv" defaultUserRating="{{ userRating }}">
 
-                    <label for="textarea"></label>
-                    <textarea name="reviewContent" id="textarea" cols="30" rows="10"></textarea>
-                    <input type="hidden" name="filmId" value="{{ film['imdbId'] }}">
-                    <input type="submit" value ="Poslat recenzi">
+                {% for i in range(10) %}
 
-                </form>
-            {% endif %}
-        {% endif %}
+                    {% if i <= userRating - 1 %}
+                        <img src="../static/imgs/full.png" alt="" order="{{i+1}}">
+                    {% else %}
+                        <img src="../static/imgs/empty.png" alt="" order="{{i+1}}">
+                    {% endif %}
+                {% endfor %}
+            </div>
 
-        <p>Recenze uživatelů:</p>
+            <div class="mt-4">
+                <h3><strong>Hodnocení na webu:</strong></h3>
+            </div>
 
-        <ul>
+            <div style="width: 200px; border-radius: 10px" class="mt-2 text-white bg-danger pt-5 pb-5 d-flex justify-content-center align-items-center">
+                <h1><strong>{{ avg_rating["avgRating"] }}</strong></h1>
+            </div>
 
-            {% for review in allReviews %}
+            <div class="mt-4">
+                <h3><strong>Hodnocení na IMDB:</strong></h3>
+            </div>
 
-            <li reviewId="{{ review['id'] }}" id = "review{{ review["id"] }}">
+            <div style="width: 120px; border-radius: 10px" class="mt-2 bg-warning pt-3 pb-3 d-flex justify-content-center align-items-center">
+                <h1><strong>{{ film["imdbRating"] }}</strong></h1>
+            </div>
+        </div>
 
-                    <div>
-                        <h3>{{ review.username}}</h3>
-                        <p>{{ review.content }}</p>
-                        <h5>{{ review.date }}</h5>
-                        <div class="thumbsDiv" thumbsRating="{{ review['logedinUsersReviewRating'] }}">
-                            <h5 style="display: inline;" class="thumbsup">{{ review['reviewRatings']['thumbsup'] }}</h5>
-                            <img src="../static/imgs/thumb_up.png" alt = "Palec nahoru" class="thumbsup" choiceVal="1">
-                            <h5 style="display: inline;" class="thumbsdown">{{ review['reviewRatings']['thumbsdown'] }}</h5>
-                            <img src="../static/imgs/thumb_down.png" alt="Palec dolů" class="thumbsdown" choiceVal="0">
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-9 offset-md-1">
+            <h2 class="mb-3"><strong>Popis filmu:</strong></h2>
+            <div style="border: 3px solid black; border-radius: 10px" class="p-2">
+            <h4>{{ film["description"] }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-4 offset-md-1">
+            <h2 class="mb-3"><strong>Trailer k filmu:</strong></h2>
+            <iframe width="640" height="360"
+                src="{{ film["trailerUrl"] }}">
+            </iframe>
+        </div>
+        <div class="col-md-5 ms-5">
+            {% if user %}
+                {% if userReview %}
+                        <h2 class="mb-3"><strong>Vaše recenze:</strong></h2>
+                        <div>
+                            <div style="border: 3px solid red; border-radius: 10px; padding: 10px; height: 315px; overflow-y: auto;" class="thumbsDiv d-flex flex-column" thumbsRating="{{ userReview['logedinUsersReviewRating'] }}">
+                                <h4 class="text-break">{{ userReview.content }}</h4>
+                                <div class="d-flex justify-content-between mt-auto">
+                                    <div class="d-flex align-items-center">
+                                        <h4 class="me-2">{{ userReview['reviewRatings']['thumbsup'] }}</h4>
+                                        <img class="me-3 mb-2" style="width: 28px" src="../static/imgs/thumb_up_full.png" alt="Vybarvený palec nahoru">
+                                        <h4 class="me-2">{{ userReview['reviewRatings']['thumbsdown'] }}</h4>
+                                        <img class="mb-1" style="width: 28px" src="../static/imgs/thumb_down_full.png" alt="Vybarvený palec dolů">
+                                    </div>
+                                    <div>
+                                        <h5 class="text-end">{{ userReview.date }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <form action="/deleteReview" method="post"><input type="hidden" name="reviewId" value="{{ userReview.id }}"><input type="submit" value="Odstranit recenzi"></form>
+                            </div>
                         </div>
+                {% else %}
+                    <h2 class="mb-3"><strong>Vaše recenze:</strong></h2>
+                    <div>
+                        <form action="/addReview" method="post">
+                            <label for="textarea"></label>
+                            <textarea placeholder="Zde můžete sdílet svoji recenzi..." style="height: 315px; width: 725px" name="reviewContent" id="textarea" cols="30" rows="10"></textarea>
+                            <input type="hidden" name="filmId" value="{{ film['imdbId'] }}">
+                            <div class="text-center mt-3">
+                                <input type="submit" value ="Poslat recenzi">
+                            </div>
+                        </form>
                     </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
 
-                </li>
+    <div class="row mt-3 mb-5" id = "reviewsDiv">
+        <div class="col-md-6 offset-md-1">
+            <h2><strong>Recenze uživatelů:</strong></h2>
+            {% for review in allReviews %}
+                <div style="border: 3px solid #0d6efd; padding: 10px; border-radius: 10px" class="mb-3" reviewId="{{ review['id'] }}" id = "review{{ review["id"] }}">
+                    <h3 style="border-radius: 10px" class="bg-primary text-white p-2">{{ review.username}}</h3>
+                    <h4 class="text-break mb-4">{{ review.content }}</h4>
+                    <div class="d-flex justify-content-between mt-auto">
+                        <div class="thumbsDiv align-items-center" thumbsRating="{{ review['logedinUsersReviewRating'] }}">
+                            <h4 style="display: inline;" class="me-2">{{ review['reviewRatings']['thumbsup'] }}</h4>
+                            <img src="../static/imgs/thumb_up.png" alt = "Palec nahoru" class="thumbup me-3 mb-2" choiceVal="1">
+                            <h4 style="display: inline;" class="me-2">{{ review['reviewRatings']['thumbsdown'] }}</h4>
+                            <img src="../static/imgs/thumb_down.png" alt="Palec dolů" class="thumbdown mb-1" choiceVal="0">
+                        </div>
+                        <h5 class="text-end">{{ review.date }}</h5>
 
+                        {# VŠE NASTYLOVÁNO, NEFUNGUJE LIKE/DISLIKE recenze, DODĚLAT, OPRAVIT #}
+
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
-
+        </div>
     </div>
 
 </main>
 
-    {% else %}
-
-    <p>{{ errorMessage }}</p>
-
+{% else %}
+    <h1>{{ errorMessage }}</h1>
 {% endif %}
 
 {% include 'reusable/footer.html' %}
