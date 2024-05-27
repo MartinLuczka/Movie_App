@@ -225,7 +225,6 @@ def filmPage(filmId):
             else:
                 allReviewsWithoutLoggedinUser.append(review)
                 # Pokud neplatí vrchní podmínka, tak recenzi přiřadíme k ostatním recenzím
-
     if film:
     # Pokud film existuje (nachází se v databázi)
         return render_template( 'film.html', film=film, userRating=rating, user=user, userReview=usersReview, allReviews = allReviewsWithoutLoggedinUser, director_name = director_name, actors = actors, avg_rating = avg_rating)

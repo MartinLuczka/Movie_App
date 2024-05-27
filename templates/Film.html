@@ -90,10 +90,10 @@
                 {% if userReview %}
                         <h2 class="mb-3"><strong>Vaše recenze:</strong></h2>
                         <div>
-                            <div style="border: 3px solid red; border-radius: 10px; padding: 10px; height: 315px; overflow-y: auto;" class="thumbsDiv d-flex flex-column" thumbsRating="{{ userReview['logedinUsersReviewRating'] }}">
+                            <div style="border: 3px solid red; border-radius: 10px; padding: 10px; height: 315px; overflow-y: auto;" class="d-flex flex-column">
                                 <h4 class="text-break">{{ userReview.content }}</h4>
                                 <div class="d-flex justify-content-between mt-auto">
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center" thumbsRating="{{ userReview['logedinUsersReviewRating'] }}">
                                         <h4 class="me-2">{{ userReview['reviewRatings']['thumbsup'] }}</h4>
                                         <img class="me-3 mb-2" style="width: 28px" src="../static/imgs/thumb_up_full.png" alt="Vybarvený palec nahoru">
                                         <h4 class="me-2">{{ userReview['reviewRatings']['thumbsdown'] }}</h4>
@@ -134,14 +134,14 @@
                     <h4 class="text-break mb-4">{{ review.content }}</h4>
                     <div class="d-flex justify-content-between mt-auto">
                         <div class="thumbsDiv align-items-center" thumbsRating="{{ review['logedinUsersReviewRating'] }}">
-                            <h4 style="display: inline;" class="me-2">{{ review['reviewRatings']['thumbsup'] }}</h4>
-                            <img src="../static/imgs/thumb_up.png" alt = "Palec nahoru" class="thumbup me-3 mb-2" choiceVal="1">
-                            <h4 style="display: inline;" class="me-2">{{ review['reviewRatings']['thumbsdown'] }}</h4>
-                            <img src="../static/imgs/thumb_down.png" alt="Palec dolů" class="thumbdown mb-1" choiceVal="0">
+                            <h4 style="display: inline;" class="thumbsup me-2">{{ review['reviewRatings']['thumbsup'] }}</h4>
+                            <img src="../static/imgs/thumb_up.png" alt = "Palec nahoru" class="thumbsup me-3 mb-2" choiceVal="1">
+                            <h4 style="display: inline;" class="thumbsdown me-2">{{ review['reviewRatings']['thumbsdown'] }}</h4>
+                            <img src="../static/imgs/thumb_down.png" alt="Palec dolů" class="thumbsdown mb-1" choiceVal="0">
                         </div>
                         <h5 class="text-end">{{ review.date }}</h5>
 
-                        {# VŠE NASTYLOVÁNO, NEFUNGUJE LIKE/DISLIKE recenze, DODĚLAT, OPRAVIT #}
+                        {# VŠE NASTYLOVÁNO, NEFUNGUJE PŘIČÍTÁNÍ POKUD RECENZI JIŽ NĚKDO HODNOTIL #}
 
                     </div>
                 </div>

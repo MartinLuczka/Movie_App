@@ -1,7 +1,7 @@
 $(document).ready(function(){
 // Když je dokument připravený (plně načtený), spustí se tento kód
-    thumbsDivs = $('ul .thumbsDiv')
-     // Vybere všechny elementy, které jsou uvnitř <ul> a mají třídu "thumbsDiv"
+    thumbsDivs = $('div .thumbsDiv')
+     // Vybere všechny elementy, které jsou uvnitř <div> a mají třídu "thumbsDiv"
 
     thumbsDivs.each(function() {
         updateVisual($(this))
@@ -14,32 +14,31 @@ $(document).ready(function(){
         // Nastaví click event handler na všechny <img> elementy uvnitř thumbsDivs
         thumbsDiv = $(this).parent()
         // Získá parent element palce
-
         if (thumbsDiv.attr("thumbsRating") === $(this).attr("choiceVal")) {
         // Pokud je hodnocení stejné jako aktuální
             thumbsDiv.attr("thumbsRating", -1)
             // Resetuje hodnocení do hodnoty -1
-            $(this).prev("h5").text(parseInt($(this).prev("h5").text()) - 1)
+            $(this).prev("h4").text(parseInt($(this).prev("h4").text()) - 1)
             // Sníží hodnotu zobrazovaného textu o 1, grafická responsivita
         }
         else {
-            if (thumbsDiv.attr("thumbsRating") === "-1") {
+            if (thumbsDiv.attr("thumbsRating") === "-1" || thumbsDiv.attr("thumbsRating") === '') {
             // Pokud ještě není hodnocení, tento případ odpovídá hodnotě nastavené do čísla -1
-                $(this).prev("h5").text(parseInt($(this).prev("h5").text()) + 1)
+                $(this).prev("h4").text(parseInt($(this).prev("h4").text()) + 1)
                 // Zvýší hodnotu zobrazovaného textu o 1, grafická responsivita
              }
             else {
             // Změna hodnocení
-                $(this).prev("h5").text(parseInt($(this).prev("h5").text()) + 1)
+                $(this).prev("h4").text(parseInt($(this).prev("h4").text()) + 1)
                 // Přidá + 1 tam, kde jsme klikli
-                $(this).siblings("img").prev("h5").text(parseInt($(this).siblings("img").prev("h5").text()) - 1)
+                $(this).siblings("img").prev("h4").text(parseInt($(this).siblings("img").prev("h4").text()) - 1)
                 // siblings - hledej elementy na stejné úrovni, druhému elementu sníží hodnotu o 1 (změnili jsme hodnocení), zpětná vazba
             }
             thumbsDiv.attr("thumbsRating", $(this).attr("choiceVal"))
             // Nastaví nové hodnocení na hodnotu atributu choiceVal
         }
 
-        updateReviewRating(thumbsDiv.parent().parent("li").attr("reviewId"), thumbsDiv.attr("thumbsRating"))
+        updateReviewRating(thumbsDiv.parent().parent("div").attr("reviewId"), thumbsDiv.attr("thumbsRating"))
         // Odešle aktualizované hodnocení na server pomocí funkce updateReviewRating
         updateVisual(thumbsDiv)
         // Aktualizace barevného zobrazení palců
