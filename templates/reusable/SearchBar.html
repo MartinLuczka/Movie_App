@@ -1,12 +1,14 @@
 <script src="../../static/SearchBar.js"></script>
 {# Cesta pro JavaScript soubor, jeho připojení #}
 
-<div class="d-flex justify-content-center mt-4 mb-2">
-    <label for="searchBar"></label>
-    {# Popisek pro searchBar, pro nás v tomto případě nepotřebné #}
-    <input style="width: 600px; height: 50px; border: 2px solid #dc3545; border-radius: 10px" placeholder="Hledejte film..." type="search" name="" id="searchBar">
-    {# Vstupní pole typu "search" s ID `searchBar`, které bude sloužit pro vyhledávání #}
+<div class="row">
+    <div class="offset-md-4 col-md-4 mt-4 mb-2">
+        <label for="searchBar"></label>
+        {# Popisek pro searchBar, pro nás v tomto případě nepotřebné #}
+        <input style="width: 600px; height: 50px; border: 2px solid #dc3545; border-radius: 10px" placeholder="Hledejte film..." type="search" name="" id="searchBar">
+        {# Vstupní pole typu "search" s ID `searchBar`, které bude sloužit pro vyhledávání #}
 
-    <ul id="searchBarList"></ul>
-    {# Nečíslovaný seznam, který bude sloužit pro zobrazení výsledků vyhledávání #}
+        <ul id="searchBarList"></ul>
+        {# Nečíslovaný seznam, který bude sloužit pro zobrazení výsledků vyhledávání #}
+    </div>
 </div>
