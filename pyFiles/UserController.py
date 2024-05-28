@@ -3,7 +3,7 @@ import shutil
 
 from flask import request, session
 from sqlalchemy import text
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 from pyFiles.Encoder import sha256
 from dbModels.Models import db
@@ -40,7 +40,14 @@ def signup(username, password, password_confirm):
         db.session.execute(query, parametres)
         db.session.commit()
         # vložení hodnot do databáze
+    except IntegrityError:
+        db.session.rollback()
+        # Vrátí se zpět dosud provedené změny
+        return "Uživatelské jméno je již zabrané"
+        # Pokud nám databáze řekne, že zadané uživatelské jméno již existuje, tak vrátíme hlášku uživatelovi
     except SQLAlchemyError as error:
+        db.session.rollback()
+        # Vrátí se zpět dosud provedené změny
         return error
     # pokud nastane chyba při zapsání do databáze, tak se vykoná blok kódu except, vrácený error se zapíše do infoMessage
     return True

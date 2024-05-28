@@ -1,25 +1,37 @@
-<nav class="navbar navbar-dark bg-primary">
-    <div class="navbar-brand">Filmová aplikace</div>
-    <ul>
-        <li><a class="navbar-brand" href="/">Domovská stránka</a></li>
-        {# Odkaz na domovskou stránku, chceme v každém případě #}
-        <li>
-            {% if session["user"] %}
-                {# Provode se, pokud jsou data v session, neboli, když je uživatel přihlášen #}
-                <a class="navbar-brand" href="/user/{{ session["user"]["id"]}}">{{ session["user"]["username"] }}</a>
-                {# Odkaz na profil uživatele podle id v databázi, Klikáme na jméno uživatele #}
-                <br> <a class="navbar-brand" href="/nastaveniProfilu">Nastavení profilu</a>
-                <br> <a class="navbar-brand" href="/odhlaseni">Odhlásit se</a>
-                {# Pokud jsme přihlášeni, už se můžeme jen odhlásit #}
-                {# br dělá nový řádek #}
-            {% else %}
-            {# Pokud nejsme přihlášeni, provede se tato část kódu #}
-                <a class="navbar-brand" href="/prihlaseni">Přihlásit se</a>
-                {# Zobrazení možnosti přihlášení #}
-                <a class="navbar-brand" href="/registrace">Zaregistrovat se</a>
-                {# Zobrazení možnosti odhlášení #}
-            {% endif %}
-            {# Ukončení podmínky #}
-        </li>
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand"><strong>Filmová aplikace</strong></a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link text-light" href="/">Domovská stránka</a>
+            </li>
+            {# Odkaz na domovskou stránku, chceme v každém případě #}
+                {% if session["user"] %}
+                    {# Provode se, pokud jsou data v session, neboli, když je uživatel přihlášen #}
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="/user/{{ session["user"]["id"]}}">{{ session["user"]["username"] }}</a>
+                    </li>
+                    {# Odkaz na profil uživatele podle id v databázi, Klikáme na jméno uživatele #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/nastaveniProfilu">Nastavení profilu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/odhlaseni">Odhlásit se</a>
+                    </li>
+                    {# Pokud jsme přihlášeni, už se můžeme jen odhlásit #}
+                    {# br dělá nový řádek #}
+                {% else %}
+                {# Pokud nejsme přihlášeni, provede se tato část kódu #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/prihlaseni">Přihlásit se</a>
+                    </li>
+                    {# Zobrazení možnosti přihlášení #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/registrace">Zaregistrovat se</a>
+                    </li>
+                    {# Zobrazení možnosti odhlášení #}
+                {% endif %}
+                {# Ukončení podmínky #}
+        </ul>
+    </div>
 </nav>

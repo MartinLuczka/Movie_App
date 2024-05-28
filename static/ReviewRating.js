@@ -57,6 +57,8 @@ $(document).ready(function(){
         })
     }
 
+    // Visuál se ne vždy správně nastaví, respektive thumbsRating je někdy -1, ikdyž uživatel má hodnocení recenze v databázi
+
     function updateVisual(div) {
     // Funkce, která aktualizuje vizuální zobrazení palců
         thumbsRating = parseInt(div.attr("thumbsRating"))

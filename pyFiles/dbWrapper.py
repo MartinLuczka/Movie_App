@@ -200,16 +200,17 @@ class Dbwrapper:
             return True
             # Metodu dokončíme vrácením hodnoty True
 
-        if db.session.execute(text("SELECT * FROM reviewRatings WHERE review = :review"),
-                              {"review": review}).fetchone() is None:
+        if db.session.execute(text("SELECT * FROM reviewRatings WHERE review = :review AND user = :user"),
+                              {"review": review, "user": user}).fetchone() is None:
             # Zde provádíme kontrolu přítomnosti hodnocení dané recenze v databázi, podmínka je splněna, pokud v databázi záznam NENÍ
             return Dbwrapper.addReviewRating(user, review, rating)
             # Metoda vrací pravdivostní hodnotu, kterou vrací metoda, pomocí které dané hodnocení recenze přidáme
 
-        query = text("UPDATE reviewRatings SET rating = :rating WHERE review = :review")
+        query = text("UPDATE reviewRatings SET rating = :rating WHERE review = :review AND user = :user")
         # Pokud hodnocení recenze existuje, tak vytvoříme dotaz pro databázi, ve kterém upravujeme hodnocení
-        parametres = {"review": review, "rating": rating}
+        parametres = {"review": review, "rating": rating, "user": user}
         # Zadání parametrů pro dotaz
+
         try:
             print("Hodnocení recenze změněno")
             # Hlášková kontrola do konzole
@@ -348,7 +349,11 @@ class Dbwrapper:
         # Dotaz pro databázi, od databáze chceme spočítat hodnoty všech hodnocení k danému filmu a zprůměrovat je + zaokrouhlení pro vhodné zobrazení
         parametres = {"filmId": filmId}
         # Parametry pro dotaz
-        return db.session.execute(query, parametres).fetchone()
+        if db.session.execute(query, parametres).fetchone() is None:
+            # Pokud průměrná hodnota je None, protože databáze ji neměla z čeho počítat, jednodušše neexsituje
+            return "Nehodnoceno"
+            # Vrátíme hlášku pro vložení na HTML stránku
+        return db.session.execute(query, parametres).fetchone().avgRating
         # Vykonání dotazu
 
     @staticmethod
