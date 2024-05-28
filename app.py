@@ -127,6 +127,9 @@ def userPage(id):
         except Exception as e:
             print(e)
             # Pokud se vyskytne vyjímka, tak si ji budeme chtít zobrazit v konzoli
+        print(f"Recenze uživatele: {usersReviews}")
+        print(f"Hodnocení uživatele: {usersRatings}")
+        # Tisknutí si do konzole pro kontrolu
         return render_template('User.html', user=user, usersRatings = usersRatings, usersReviews = usersReviews)
         # Vracíme načtení stránky HTML dokumentu, do kterého si posíláme získaná data pro vhodné zobrazení
     return render_template('User.html', errorMessage='User not found')

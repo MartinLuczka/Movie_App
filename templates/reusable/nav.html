@@ -1,37 +1,44 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand"><strong>Filmová aplikace</strong></a>
+    <a class="navbar-brand ms-5 mt-2 mb-2"><h1><strong>Filmová aplikace</strong></h1></a>
     <div class="collapse navbar-collapse">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav me-auto">
             <li class="nav-item">
-                <a class="nav-link text-light" href="/">Domovská stránka</a>
+                <a class="nav-link text-light mt-2 ms-3" href="/"><h3>Domovská stránka</h3></a>
             </li>
             {# Odkaz na domovskou stránku, chceme v každém případě #}
-                {% if session["user"] %}
-                    {# Provode se, pokud jsou data v session, neboli, když je uživatel přihlášen #}
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="/user/{{ session["user"]["id"]}}">{{ session["user"]["username"] }}</a>
-                    </li>
-                    {# Odkaz na profil uživatele podle id v databázi, Klikáme na jméno uživatele #}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/nastaveniProfilu">Nastavení profilu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/odhlaseni">Odhlásit se</a>
-                    </li>
-                    {# Pokud jsme přihlášeni, už se můžeme jen odhlásit #}
-                    {# br dělá nový řádek #}
-                {% else %}
-                {# Pokud nejsme přihlášeni, provede se tato část kódu #}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/prihlaseni">Přihlásit se</a>
-                    </li>
-                    {# Zobrazení možnosti přihlášení #}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/registrace">Zaregistrovat se</a>
-                    </li>
-                    {# Zobrazení možnosti odhlášení #}
-                {% endif %}
-                {# Ukončení podmínky #}
+        </ul>
+        <div style="border: 2px solid black; border-radius: 10px" class="position-absolute start-50 translate-middle-x d-flex align-items-center bg-info ps-3">
+            <h2 class="mt-2 me-3"><strong>Milujeme film!</strong></h2>
+            <a class="nav-link text-light mx-1"><i class="bi bi-camera-reels-fill" style="font-size: 2rem; color: grey"></i></a>
+            <a class="nav-link text-light mx-1"><i class="bi bi-film" style="font-size: 2rem; color: black"></i></a>
+            <a class="nav-link text-light mx-1"><i class="bi bi-emoji-smile-fill" style="font-size: 2rem; color: yellow"></i></a>
+        </div>
+        <ul class="navbar-nav ms-auto">
+            {% if session["user"] %}
+                {# Provede se, pokud jsou data v session, neboli, když je uživatel přihlášen #}
+                <li class="nav-item">
+                    <a class="nav-link text-light mt-2 me-3" href="/user/{{ session["user"]["id"]}}"><h3>{{ session["user"]["username"] }}</h3></a>
+                </li>
+                {# Odkaz na profil uživatele podle id v databázi, Klikáme na jméno uživatele #}
+                <li class="nav-item">
+                    <a class="nav-link text-light mt-2 me-3" href="/nastaveniProfilu"><h3>Nastavení profilu</h3></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger mt-2 me-5" href="/odhlaseni"><h3>Odhlásit se</h3></a>
+                </li>
+                {# Pokud jsme přihlášeni, už se můžeme jen odhlásit #}
+            {% else %}
+            {# Pokud nejsme přihlášeni, provede se tato část kódu #}
+                <li class="nav-item">
+                    <a class="nav-link text-warning mt-2 me-3" href="/prihlaseni"><h3>Přihlásit se</h3></a>
+                </li>
+                {# Zobrazení možnosti přihlášení #}
+                <li class="nav-item">
+                    <a class="nav-link text-warning mt-2 me-5" href="/registrace"><h3>Zaregistrovat se</h3></a>
+                </li>
+                {# Zobrazení možnosti odhlášení #}
+            {% endif %}
+            {# Ukončení podmínky #}
         </ul>
     </div>
 </nav>

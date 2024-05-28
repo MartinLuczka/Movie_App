@@ -127,7 +127,9 @@
 
     <div class="row mt-3 mb-5" id = "reviewsDiv">
         <div class="col-md-6 offset-md-1">
-            <h2><strong>Recenze uživatelů:</strong></h2>
+            {% if allReviews != [] %}
+                <h2><strong>Recenze uživatelů:</strong></h2>
+            {% endif %}
             {% for review in allReviews %}
                 <div style="border: 3px solid #0d6efd; padding: 10px; border-radius: 10px" class="mb-3" reviewId="{{ review['id'] }}" id = "review{{ review["id"] }}">
                     <h3 style="border-radius: 10px" class="bg-primary text-white p-2">{{ review.username}}</h3>
