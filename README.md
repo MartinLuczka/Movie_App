@@ -9,8 +9,10 @@ Zadáním bylo si v libovolném programovacím jazyce zpracovat projekt.
 To, o čem projekt měl být, jsme si mohli vybrat sami. 
 Měl jsem více nápadů, ale volba padla na **Webovou aplikaci vytvořenou pomocí webového frameworku Flask a databázovým systémem SQLite**.
 
-<img style="margin-left: 30px" src="README_file_imgs/Flask_logo.png" alt="Logo Flasku" width="220"/>
-<img style="margin-left: 100px" src="README_file_imgs/SQLite_logo.png" alt="Logo SQLite" width="220"/>
+<div style="display: flex; align-items: center;">
+    <img style="margin-left: 30px" src="README_file_imgs/Flask_logo.png" alt="Logo Flasku" width="220"/>
+    <img style="margin-left: 100px" src="README_file_imgs/SQLite_logo.png" alt="Logo SQLite" width="220"/>
+</div>
 
 ## Proč zrovna webová aplikace zaměřená na hodnocení filmů ?
 
@@ -60,9 +62,11 @@ Oba programy totiž spadají pod (dokonce českou) softwarovou společenost
 <a href = "https://www.jetbrains.com/">**JetBrains**</a>,
 která podobných programů provozuje celou řadu.
 
-<img style="margin-left: 25px; margin-bottom: 15px" src="README_file_imgs/Bootstrap_logo.png" alt="Logo Bootstrapu" width="170"/>
-<img style="margin-left: 25px" src="README_file_imgs/PyCharm-logo.png" alt="Logo PyCharmu" width="170"/>
-<img style="margin-left: 25px" src="README_file_imgs/JetBrains_logo.png" alt="Logo JetBrains" width="190"/>
+<div style="display: flex; align-items: center; flex-wrap: wrap;">
+    <img style="margin-left: 25px; margin-bottom: 15px" src="README_file_imgs/Bootstrap_logo.png" alt="Logo Bootstrapu" width="170"/>
+    <img style="margin-left: 25px; margin-bottom: 15px" src="README_file_imgs/PyCharm-logo.png" alt="Logo PyCharmu" width="170"/>
+    <img style="margin-left: 25px; margin-bottom: 15px" src="README_file_imgs/JetBrains_logo.png" alt="Logo JetBrains" width="190"/>
+</div>
 
 > [!TIP]
 > Pokud jste studentem a máte **ISIC kartu**, tak si můžete v rámci produktů
@@ -104,7 +108,9 @@ tak jsem to tak raději nechal. V **HTML** jsem kód v podstatě moc nekomentova
 nemyslím si, že by to přineslo moc užitku a já osobně se v tom lépe vyznám
 spíše takto.
 
-<img style="margin-left: 35px; margin-bottom: 20px" src="README_file_imgs/comment_PY_script.png" alt="Ukázka komentáře v Pythonu" width="250"/>
-<img style="margin-left: 35px; " src="README_file_imgs/comment_JS_script.png" alt="Ukázka komentáře v JavaScriptu" width="250"/>
+<div style="display: flex; align-items: center;">
+    <img style="margin-left: 35px; margin-bottom: 20px" src="README_file_imgs/comment_PY_script.png" alt="Ukázka komentáře v Pythonu" width="250"/>
+    <img style="margin-left: 35px;" src="README_file_imgs/comment_JS_script.png" alt="Ukázka komentáře v JavaScriptu" width="250"/>
+</div>
 
 
