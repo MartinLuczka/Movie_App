@@ -265,7 +265,7 @@ def hodnoceniFilmu():
     # funkce, která zhodnocení filmu zpracovává
     val = request.json
     # získá data z HTTP požadavku jako json objekt a přiřadí ho proměnné val
-    print(val)
+    print(f"Tisknutí val z JS: {val}")
     # val je zde slovník s daty o hodnocení a filmu, tisk do konzole pro kontrolu
 
     if 'user' not in session:
