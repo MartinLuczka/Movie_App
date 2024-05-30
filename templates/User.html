@@ -18,9 +18,11 @@
                 <p>Tento uživatel se ještě nepředstavil...</p>
             {% endif %}
         </div>
+        {% if usersReviews != [] %}
         <div class="col-md-3">
             <button style="margin-top: 95px" onclick="window.location.href='#recenze_uzivatele'">Přejít na RECENZE uživatele <strong>{{ user.username }}</strong></button>
         </div>
+        {% endif %}
     </div>
 
     {% if usersRatings != [] %}

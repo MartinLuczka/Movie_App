@@ -1,5 +1,16 @@
 # MOVIE APP
 
+## Jak si webovou aplikaci zprovoznit na svém zařízení ?
+
+Aby web fungoval všem pouze s přístupem na internet, tak bych musel zařídit
+nějaký hosting této webové aplikace. Pro účely našeho projektu je to ale
+zbytečné. Nic ovšem nebrání tomu, abyste si mohli aplikaci zprovoznit
+**lokálně** a na mnou vytvořený web se podívali a vyzkoušeli si ho.
+
+**Po zprovoznění stačí následnovat pouze tyto pokyny:**
+
+1.
+
 ## Jak vznikl tento projekt ?
 
 Projekt byl vytvořen jako závěrečná práce do předmětu 
@@ -108,9 +119,13 @@ tak jsem to tak raději nechal. V **HTML** jsem kód v podstatě moc nekomentova
 nemyslím si, že by to přineslo moc užitku a já osobně se v tom lépe vyznám
 spíše takto.
 
+**Ukázka:**
+
 <div style="display: flex; align-items: center;">
     <img style="margin-left: 25px; margin-bottom: 20px" src="README_file_imgs/comment_PY_script.png" alt="Ukázka komentáře v Pythonu" width="650"/>
     <img style="margin-left: 25px;" src="README_file_imgs/comment_JS_script.png" alt="Ukázka komentáře v JavaScriptu" width="650"/>
 </div>
+
+## Jak to celé funguje ?
 
 

@@ -3,8 +3,11 @@ import json
 import os
 import shutil
 
-from flask import Flask, render_template, request, session, redirect, jsonify
-from flask_sqlalchemy import SQLAlchemy
+try:
+  from flask import Flask, render_template, request, session, redirect, jsonify
+except ImportError:
+  print("Trying to Install required module: requests\n")
+  os.system('python -m pip install flask')
 
 from dbModels.Models import db
 from pyFiles.Encoder import sha256
@@ -190,6 +193,8 @@ def filmPage(filmId):
 
         for i, review in enumerate(allReviews):
             # Pro každou recenzi v seznamu
+            print(".........................................................................................................................")
+            # Odlišení bloku při řešení problému v konzoli
             print(review)
             # V každém projetí cyklem si vypíšeme recenzi, se kterou se pracuje
             reviewRatings = Dbwrapper.rowsToDict(Dbwrapper.getReviewRatings(review['id']))
@@ -200,7 +205,11 @@ def filmPage(filmId):
             if reviewRatings:
             # Pokud existují hodnocení k recenzi
                 for reviewRating in reviewRatings:
-                    # Pro každé hodnocení k recenzi
+                # Pro každé hodnocení k recenzi
+                    print(".................................................................................................................")
+                    # Odlišení bloku při řešení problému
+                    print(json.dumps(reviewRating, indent=4))
+                    # Tiskneme si danou recenzi
                     if reviewRating['rating'] == 1:
                     # Pokud je hodnocení v databázi 1
                         ratings["thumbsup"] += 1
@@ -210,16 +219,25 @@ def filmPage(filmId):
                         ratings["thumbsdown"] += 1
                         # Přičti jedničku k palcům dolů
 
-                    if 'user' in session:
-                    # Pokud je uživatel přihlášen
+                    if 'user' in session and ('logedinUsersReviewRating' not in review or review['logedinUsersReviewRating'] == -1):
+                    # Pokud je uživatel přihlášen a zároveň ještě není nastaven klíč ve slovníku (první projití)
+                    # nebo tento klíč má hodnotu -1 (uživatel nemá ohodnoceno - koukáme se dál)
+                    # Pokud najdeme hodnocení uživatele, tzn. klíč se přepíše na 0 nebo 1 podle hodnocení, tak už dál nehledáme, může tam být pouze jednou
                         if reviewRating['user'] == session['user']['id']:
                             # Pokud se uživatel daného hodnocení shoduje s přihlášeným uživatelem
+                            print("prošlo")
+                            print(f"reviewRating['user']: {reviewRating['user']}, id usera v session:{session['user']['id']}")
+                            # Ukázka debuggování při řešení problému s hodnocením recenzí jiných uživatelů
                             review['logedinUsersReviewRating'] = reviewRating['rating']
                             # Uloží hodnocení přihlášeného uživatele do recenze
                         else:
+                            print("neprošlo")
+                            print(f"reviewRating['user']: {reviewRating['user']}, id usera v session:{session['user']['id']}")
+                            # Ukázka debuggování při řešení problému s hodnocením recenzí jiných uživatelů
                             review['logedinUsersReviewRating'] = -1
                             # Jinak nastaví hodnocení na -1 (uživatel není autorem hodnocení)
             review['reviewRatings'] = ratings
+            print(f"Review: {review}")
             # Přiřadí počet lajků a dislajků do recenze
             if 'user' in session and review['user'] == session['user']['id']:
             # Pokud jakýkoliv uživatel je v sessionu a je autorem recenze
