@@ -65,7 +65,7 @@ Děkuji.*
 > Jinak si **NEZAPOMEŇTE ZKONTROLOVAL VERZI PYTHONU**. V části kódu syntakticky fungují
 > jen verze **3.12 a novější**.
 
-4. ### Dále už jen flask aplikaci spustíte a můžete se s mojí stránkou seznámit
+4. ### Dále už jen Flask aplikaci spustíte a můžete se s mojí stránkou seznámit
 
 **Pokud máte adresář příkazového řádku ve složce projektu tak už stačí jen zadat tento příkaz**:
 
@@ -84,7 +84,7 @@ Ve Vašem případě bude s největší pravděpodobností adresa portu vypadat 
 **S případnými problémy se mě nebojte kontaktovat, viz konec README**.
 
 > [!NOTE]
-> Nespoštějte jen tak Python soubory ve složce ***insertovac***, tu jsem přidal
+> Nespouštějte jen tak Python soubory ve složce ***insertovac***, tu jsem přidal
 > teď na konec mezi posledními commity, aby lidé, které to zajímá, se mohli
 > podívat, jak jsem řešil přidávání dat do databáze. Tyto soubory nejsou
 > nějak extra okomentovány. Spuštění souborů by začlo přímo upravovat
@@ -192,13 +192,13 @@ poslat odkazy na youtube videa (Python vyhledá název filmu + trailer
 na stránce <a href = "https://www.youtube.com/">Youtube</a>) a Python
 program již vezme a do databáze uloží adresu prvního výsledku).  
 
-Dále byl problém s popisem filmu v angličtině. Ten jsem vyřešil tak, 
+Dále byl problém s popisem filmů v angličtině. Ten jsem vyřešil tak, 
 že si na stránkách <a href = "https://www.csfd.cz/">ČSFD</a> vyhledávám
 jednotlivé filmy a vybírám si text z popisu filmu u prvního výsledku.
 Jelikož jsou to většinou ty nejznámnější filmy, tak první výsledek je
-ve všem případech s největší pravděpodobností dobře (nenarazil jsem na chybu).
+ve všech případech s největší pravděpodobností dobře (nenarazil jsem na chybu).
 Filmy, u kterých chyběl popisek (nebyl nebo se nevyhledal celý název filmu, ČSFD
-má omezen počet znaků ve vyhledávání na 50 - vyhodilo chybu), tak
+má omezený počet znaků ve vyhledávání na 50 - vyhodí tím pádem chybu), tak
 jsem popisky doplnit manuálně za pomoci internetu.
 
 ## Python souborů je v projektu strašně moc a některé jsou dost rozsáhlé, jak se v tom mám vyznat ?
@@ -276,7 +276,7 @@ jednotlivých uživatelů a také samozřejmě obrázky, které využívá
 #### Rating.js
 
 **JavaScript, který řeší hodnocení filmu na stránce filmu** pomocí
-hvězdiček. **Dokument sleduje pohyb myši** a "rožíná" a "zhasíná" udávané
+hvězdiček. **Dokument sleduje pohyb myši** a "rozsvěcuje" a "zhasíná" udávané
 hvězdičky. Při stisknutí zjistí, na jaké hvězdě bylo kliknutí provedeno
 a **pošle data na url adresu**, kterou dále řešíme v **app.py** (data poté
 posíláme do databáze).
@@ -313,7 +313,7 @@ Tímto způsobem je tam nemusíme psát pořád od znovu a ušetříme místo a 
 tím pádem přehlednější.
 
 HTML soubory přímo ve složce ***templates*** jsou unikátní a uživatel si je
-může zobrazit buď přes hlavní nabídku v navigatoru stránky, či skrze různé
+může zobrazit buď přes hlavní nabídku v navigátoru stránky, či skrze různé
 prokliky přes domovskou stránku a stránku filmu.
 
 ### Python soubor **app.py**
@@ -323,7 +323,7 @@ webové aplikace**. Pokud se dostanete na webovkách na nějakou cestu, tzv. **r
 tak to tento Python soubor pozná a **spustí vždy nějakou funkci**, která
 požadavek nějakým způsobem **obslouží**. Na stránce filmu route například předá
 do funkce id filmu a samotná funkce už si s touto znalostí vytahuje jednotlivé
-data **pomocí metod Dbwrapper z databáze**. Ale zase některé routy mají mnohem
+data **pomocí metod Dbwrapperu z databáze**. Ale zase některé routy mají mnohem
 "akčnější" funkci a přebírají různá data a třeba mažou nebo přidávají recenze
 v databázi. Dalo by se říct, že je takovým "**zprostředkovatelem
 komunikace mezi databází a HTML stránkami**".
