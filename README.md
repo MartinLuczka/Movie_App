@@ -9,7 +9,72 @@ zbytečné. Nic ovšem nebrání tomu, abyste si mohli aplikaci zprovoznit
 
 **Po zprovoznění stačí následnovat pouze tyto pokyny:**
 
-1.
+1. ### Pro zprovoznění webové aplikace musíte mít nainstalovaný python (**3.12 a vyšší**)
+
+Pokud nemáte, tak stiskněte `Win + X` a otevřte si Windows Powershell jako správce
+
+Abyste jeho instalaci nemuseli pracně instalovat, tak si ho nainstalujeme pomocí <a href="https://chytrosti.marrek.cz/chocolatey.html">Chocolatey</a>.
+
+Do Powershellu zadejte:
+
+```json
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+```
+
+Poté nainstalujte jednoduchým příkazem:
+
+```json
+    choco install python
+```
+
+2. ### Stáhněte si tento projekt jako RAR (nebo si **naklonujte git repozitář**)
+
+Pokud máte nainstalované nějaké vývojové prostředí př. **Visual Studio Code**, **VSCodium**, **Pycharm**...,
+tak si složku projektu otevřít tam (**spusťte si konzoli**)
+
+Pokud nic takového nemáte, nevadí. Otevřte si cestu do složky v **příkazovém řádku - cmd**
+
+Jak se to dělá: < href="https://www.youtube.com/watch?v=bgSSJQolR0E&t=47s"a>Otevření cmd z Průzkumníka souborů</a>
+
+3. ### Teď už jen stačí nainstalovat knihovny, které webová aplikace využívá
+
+**Tyto příkazy POSTUPNĚ vkládejte a vykonávejte ve vašich terminálech**
+
+(***pip*** je součástí **Pythonu**)
+
+```json
+  pip install flask
+```
+
+```json
+  pip install SQLAlchemy
+```
+
+```json
+  pip install Flask-SQLAlchemy
+```
+
+*Poznámka: SQLAlchemy by měla být součástí knihovny Flask-SQLAlchemy, ale
+v projektu importujeme z obou, tak si ji (i pro klid v duši) nainstalujte.
+Děkuji.*
+
+4. ### Dále už jen flask aplikaci spustíte a můžete se s mojí stránkou seznámit
+
+**Pokud máte adresář příkazového řádku ve složce projektu tak už stačí jen zadat tento příkaz**:
+
+```json
+  C:\cesta adresáře> python -m flask run
+```
+
+*Poznámka: disk C je pouze příklad, Vy to můžete mít jinak.*
+
+5. ### Poté jen zadejte do webového prohlížeče adresu lokálního portu
+
+Ve Vašem případě bude s největší pravděpodobností adresa portu vypadat takto: **127.0.0.1:5000**
+
+6. ### Webová aplikace by měla být funkční a vy ji můžete v kliduv vyzkoušet
+
+**S případnými problémy se mě nebojte kontaktovat, viz konec README**.
 
 ## Jak vznikl tento projekt ?
 
@@ -20,10 +85,16 @@ Zadáním bylo si v libovolném programovacím jazyce zpracovat projekt.
 To, o čem projekt měl být, jsme si mohli vybrat sami. 
 Měl jsem více nápadů, ale volba padla na **Webovou aplikaci vytvořenou pomocí webového frameworku Flask a databázovým systémem SQLite**.
 
-<div style="display: flex; align-items: center;">
-    <img style="margin-left: 280px" src="README_file_imgs/Flask_logo.png" alt="Logo Flasku" width="220"/>
-    <img style="margin-left: 280px" src="README_file_imgs/SQLite_logo.png" alt="Logo SQLite" width="220"/>
-</div>
+<table style="border: none;">
+  <tr style="border: none;">
+    <td style="border: none;">
+      <img src="README_file_imgs/Flask_logo.png" alt="Logo Flasku" width="220px" style="margin-left: 50px"/>
+    </td>
+    <td style="border: none;">
+      <img src="README_file_imgs/SQLite_logo.png" alt="Logo SQLite" width="220px"/>
+    </td>
+  </tr>
+</table>
 
 ## Proč zrovna webová aplikace zaměřená na hodnocení filmů ?
 
