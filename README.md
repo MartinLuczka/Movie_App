@@ -9,7 +9,7 @@ zbytečné. Nic ovšem nebrání tomu, abyste si mohli aplikaci zprovoznit
 
 **Po zprovoznění stačí následnovat pouze tyto pokyny:**
 
-1. ### Pro zprovoznění webové aplikace musíte mít nainstalovaný Python (<u>**3.12 a vyšší**</u>)
+1. ### Pro zprovoznění webové aplikace musíte mít nainstalovaný Python (<u>**3.12 a novější**</u>)
 
 Pokud nemáte, tak stiskněte `Win + X` a otevřte si Windows Powershell jako správce
 
@@ -63,7 +63,7 @@ Děkuji.*
 > Samotný jsem to zkoušel zprovozňovat na jiném zařízením a tam to zabralo.
 > 
 > Jinak si **NEZAPOMEŇTE ZKONTROLOVAL VERZI PYTHONU**. V části kódu syntakticky fungují
-> jen verze **3.12 a vyšší**.
+> jen verze **3.12 a novější**.
 
 4. ### Dále už jen flask aplikaci spustíte a můžete se s mojí stránkou seznámit
 
@@ -79,9 +79,16 @@ Děkuji.*
 
 Ve Vašem případě bude s největší pravděpodobností adresa portu vypadat takto: **127.0.0.1:5000**
 
-6. ### Webová aplikace by měla být funkční a vy ji můžete v kliduv vyzkoušet
+6. ### Webová aplikace by měla být funkční a vy ji můžete v klidu vyzkoušet
 
 **S případnými problémy se mě nebojte kontaktovat, viz konec README**.
+
+> [!NOTE]
+> Nespoštějte jen tak Python soubory ve složce ***insertovac***, tu jsem přidal
+> teď na konec mezi posledními commity, aby lidé, které to zajímá, se mohli
+> podívat, jak jsem řešil přidávání dat do databáze. Tyto soubory nejsou
+> nějak extra okomentovány. Spuštění souborů by začlo přímo upravovat
+> databázi !
 
 ## Jak vznikl tento projekt ?
 
@@ -274,6 +281,8 @@ hvězdičky. Při stisknutí zjistí, na jaké hvězdě bylo kliknutí provedeno
 a **pošle data na url adresu**, kterou dále řešíme v **app.py** (data poté
 posíláme do databáze).
 
+Tenhle i ostatní **JavaScripty** jsou psány pomocí **knihovny <a href="https://cs.wikipedia.org/wiki/JQuery">jquery</a>**.
+
 #### ReviewRating.js
 
 **JavaScript soubor, který zajišťuje hodnocení recenzí** pomocí palce
@@ -438,7 +447,7 @@ Rád bych poděkoval svému učiteli do Programování **panu Krbcovi**, že ve 
 hodinami a stylem učení vyvolal chuť k programování a také za jeho rychlou
 zpětnou vazbu, co se týče dotazů a připomínek. Dále bych chtěl také poděkovat
 svému bratranci **Standovi**, který mi pomáhal s tvorbou JavaScriptu a také
-mi vysvětloval některé principy pokročilejšího programování v Pythonu."
+mi vysvětloval některé principy pokročilejšího programování v Pythonu.
 
 ## Dojmy, nápady, návrhy
 
