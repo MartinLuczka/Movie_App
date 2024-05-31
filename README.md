@@ -34,7 +34,7 @@ tak si složku projektu otevřít tam (**spusťte si konzoli**)
 
 Pokud nic takového nemáte, nevadí. Otevřte si cestu do složky v **příkazovém řádku - cmd**
 
-Jak se to dělá: < href="https://www.youtube.com/watch?v=bgSSJQolR0E&t=47s"a>Otevření cmd z Průzkumníka souborů</a>
+Jak se to dělá: <a href="https://www.youtube.com/watch?v=bgSSJQolR0E&t=47s">Otevření cmd z Průzkumníka souborů</a>
 
 3. ### Teď už jen stačí nainstalovat knihovny, které webová aplikace využívá
 
@@ -306,5 +306,136 @@ tím pádem přehlednější.
 HTML soubory přímo ve složce ***templates*** jsou unikátní a uživatel si je
 může zobrazit buď přes hlavní nabídku v navigatoru stránky, či skrze různé
 prokliky přes domovskou stránku a stránku filmu.
+
+### Python soubor **app.py**
+
+To nejdůležitější na konec. Tento soubor je v podstatě **srdcem celé Flask
+webové aplikace**. Pokud se dostanete na webovkách na nějakou cestu, tzv. **route**,
+tak to tento Python soubor pozná a **spustí vždy nějakou funkci**, která
+požadavek nějakým způsobem **obslouží**. Na stránce filmu route například předá
+do funkce id filmu a samotná funkce už si s touto znalostí vytahuje jednotlivé
+data **pomocí metod Dbwrapper z databáze**. Ale zase některé routy mají mnohem
+"akčnější" funkci a přebírají různá data a třeba mažou nebo přidávají recenze
+v databázi. Dalo by se říct, že je takovým "**zprostředkovatelem
+komunikace mezi databází a HTML stránkami**".
+
+## Lehký popis obsahu na jednotlivých HTML stránkách
+
+### Stránka registrace
+
+Uživatel zadává své přihlašovací jméno (**nejde posléze změnit, slouží poté jako nick na stránce**)
+a také své heslo, které musí pro potvrzení zadat znovu stejně jako předtím.
+
+Stránka také vyhazuje zprávu když se zadaná hesla liší, nebo když je 
+uživatelské jméno již zabrané.
+
+<img src="README_file_imgs/sign_up_page.png" alt="Stránka registrace" width="500px"/>
+
+### Stránka přihlášení
+
+Dosti podobná té na registraci. Zde je jen zadání přihlašovacího jméno a 
+potvrzení přihlášení helsem.
+
+Opět zobrazujeme chybové hlášky: např. **Chybné heslo nebo přihlašovací jméno**.
+
+<img src="README_file_imgs/login_page.png" alt="Stránka přihlášení" width="500px"/>
+
+### Domovská stránka
+
+**Je rozdělena na 3 sloupce, každý sloupec informuje o něčem jiném**.
+
+**První sloupec nám zobrazuje TOP 10 nejlepších filmů** naší webové stránky.
+Seřazuje je podle hodnocení. Zobrazujeme ještě plakát, název a rok vydání.
+Na stránku filmu jde samozřejmě prokliknout.
+
+**Druhý sloupec nám zobrazuje TOP 10 nejvíce aktivních uživatelů**. O nich
+nám zobrazujeme profilový obrázek, jméno a počet bodů aktivity, které mají.
+Podle těchto bodů jsou sloupce seřazeny. Profil uživatele si můžeme rozkliknout.
+Body jsou dány takto:
+- **8** bodů za recenzi filmu
+- **3** body za ohodnocení filmu
+- **1** bod za ohodnocení cizí recenze
+
+**Třetí sloupec zobrazuje TOP 10 nedávných recenzí**. Recenze jsou zde seřazeny
+podle datumu přidání recenze. Nejnovější je vždy nahoře. Zde zobrazujeme plakát
+a název filmu. **Pokud si film rozklikneme, tak nás automaticky přesměruje
+na místo dané recenze na stránce**. Můžeme si samozřejmě rozkliknout i profil
+uživatele.
+
+<img src="README_file_imgs/home_page.png" alt="Domovská stránka" width="500px"/>
+
+## Stránka filmu
+
+Stránka filmu nám shrnuje základní informace o daném filmu. Máme zde také možnost
+ho ohodnotit a naše hodnocení graficky vidět. Pokud film ještě není ohodnocen,
+tak je u hodnocení napsáno: ***Nehodnoceno***. Dále pokud jsem přihlášení, tak
+můžeme vidět možnost pro napsání recenze, popřípadě pokud již recenzi máme, tak ji
+můžeme smazat. Zároveň také vidíme počet liků a disliků na naší recenzi.
+
+**Jen pokud nějaké jsou**, tak se nám zobrazují recenze ostatních uživatelů,
+které můžeme ohodnoit, pokud jsme přihlášeni. Zobrazuje se také počet liků a
+disliků jednotlivých recenzí. Přes recenzi můžeme rozkliknout profil daného
+uživatele.
+
+Na stránce se také nachází **trailer na film**, ten většinou může být
+spuštěn rovnou ze stránky, někdy je k dispozici **pouze odkaz na stránky
+youtube**.
+
+<img src="README_file_imgs/film_page1.png" alt="Stránka filmu, část 1" width="500px"/>
+<img src="README_file_imgs/film_page2.png" alt="Stránka filmu, část 2" width="500px"/>
+
+### Stránka uživatele
+
+Na stránce uživatele můžeme vidět jeho profilovou fotku (kterou si buď sám
+vybere nebo dostane defaultní při registraci), popisek (ten si může průbězně
+kdykoliv měnit, upravovat, mazat, je to jen na něj).
+
+Dále se můžeme kouknout na uživatelovi **hodnocení a recenze**. Pokud uživatel
+nemá žádnou recenzi, nebo nemá žádné hodnocení, tak se dané tabulky nezobrazují, 
+takže se nemůže stát, že by zůstal pouze nadpis tabulky bez obsahu.
+
+V tabulce s hodnocením **zvýrazňujeme především hodnocení**, ale také zde
+máme mnoho základních informací o filmu a také datum hodnocení.
+
+Recenze jsou graficky spíše takové **"kartičky"**, ve kterých máme název filmu s 
+jeho plakátem + samozřejmě obsah recenze a datum odeslání napsané recenze.
+
+Na začátku stránky máme tlačítko, **které nás na stránce přesune rovnou na recenze**.
+To se může hodit v případě, když uživatel má mnoho hodnocení a my se nechceme
+uscroolovat.
+
+<img src="README_file_imgs/user_page1.png" alt="Stránka profilu uživatele, část 1" width="500px"/>
+<img src="README_file_imgs/user_page2.png" alt="Stránka profilu uživatele, část 2" width="500px"/>
+
+### Stránka nastavení profilu uživatele
+
+Tato stránka je **kompozičně zpracována na prostředek**, stejně jako stránka přihlášení
+a odhlášení. Volil jsem to proto, že když má stránka méně obsahu, tak se mi
+to více líbí takhle na prostředku, ale to je zase dost subjektivní záležitost.
+
+Na této stránce si můžeme **vybrat profilovou fotografii ze svého počítače**, musí to
+být obrázek, který se poté převede na `.png` soubor. Tyto obrázky se poté
+ukládají pod číslem ***(id)*** daného uživatele. Obrázek poté můžeme samozřejmě
+kdykoliv změnit.
+
+Dále si můžeme **upravit, smazat, napsat nanovo text, který nás na našem profilu
+představuje ostatním**. Toto pole může být také úplně prázdné, ale potom máte na
+profilu napsáno, že jste se ještě nepředstavili...
+
+Poslední tu máme **změnu hesla**, při které musíme **zadat heslo nové správně 2x** a poté ještě
+**zadat heslo "staré"**. V rámci zadávání je několik "chybových hlášek", které
+mohou nastat. Např. **"Špatně zadané staré heslo"** či **"Nová hesla se neshodují"** a další.
+
+Tyto změny poté můžeme všechny naráz **poslat potvrzením změn tlačítkem**.
+Profilový obrázek, popisek i nové heslo můžeme nastavit kliknutím na jedno
+tlačítko. **Nemusíme posílat všechno zvlášť na několikrát**.
+
+<img src="README_file_imgs/user_settings.png" alt="Stránka nastavení profilu" width="500px"/>
+
+
+
+
+
+
 
 

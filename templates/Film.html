@@ -132,7 +132,7 @@
             {% endif %}
             {% for review in allReviews %}
                 <div style="border: 3px solid #0d6efd; padding: 10px; border-radius: 10px" class="mb-3" reviewId="{{ review['id'] }}" id = "review{{ review["id"] }}">
-                    <h3 style="border-radius: 10px" class="bg-primary text-white p-2">{{ review.username}}</h3>
+                    <a href="/user/{{ review.user }}"><h3 style="border-radius: 10px" class="bg-primary text-white p-2">{{ review.username}}</h3></a>
                     <h4 class="text-break mb-4">{{ review.content }}</h4>
                     <div class="d-flex justify-content-between mt-auto">
                         <div class="thumbsDiv align-items-center" thumbsRating="{{ review['logedinUsersReviewRating'] }}">
