@@ -9,7 +9,7 @@ zbytečné. Nic ovšem nebrání tomu, abyste si mohli aplikaci zprovoznit
 
 **Po zprovoznění stačí následnovat pouze tyto pokyny:**
 
-1. ### Pro zprovoznění webové aplikace musíte mít nainstalovaný python (**3.12 a vyšší**)
+1. ### Pro zprovoznění webové aplikace musíte mít nainstalovaný python (<u>**3.12 a vyšší**</u>)
 
 Pokud nemáte, tak stiskněte `Win + X` a otevřte si Windows Powershell jako správce
 
@@ -17,13 +17,13 @@ Abyste jeho instalaci nemuseli pracně instalovat, tak si ho nainstalujeme pomoc
 
 Do Powershellu zadejte:
 
-```json
+```
     Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 
 Poté nainstalujte jednoduchým příkazem:
 
-```json
+```
     choco install python
 ```
 
@@ -42,15 +42,15 @@ Jak se to dělá: < href="https://www.youtube.com/watch?v=bgSSJQolR0E&t=47s"a>Ot
 
 (***pip*** je součástí **Pythonu**)
 
-```json
+```
   pip install flask
 ```
 
-```json
+```
   pip install SQLAlchemy
 ```
 
-```json
+```
   pip install Flask-SQLAlchemy
 ```
 
@@ -62,7 +62,7 @@ Děkuji.*
 
 **Pokud máte adresář příkazového řádku ve složce projektu tak už stačí jen zadat tento příkaz**:
 
-```json
+```
   C:\cesta adresáře> python -m flask run
 ```
 
@@ -85,13 +85,13 @@ Zadáním bylo si v libovolném programovacím jazyce zpracovat projekt.
 To, o čem projekt měl být, jsme si mohli vybrat sami. 
 Měl jsem více nápadů, ale volba padla na **Webovou aplikaci vytvořenou pomocí webového frameworku Flask a databázovým systémem SQLite**.
 
-<table style="border: none;">
-  <tr style="border: none;">
-    <td style="border: none;">
-      <img src="README_file_imgs/Flask_logo.png" alt="Logo Flasku" width="220px" style="margin-left: 50px"/>
+<table>
+  <tr>
+    <td>
+      <img src="README_file_imgs/Flask_logo.png" alt="Logo Flasku" width="260px"/>
     </td>
-    <td style="border: none;">
-      <img src="README_file_imgs/SQLite_logo.png" alt="Logo SQLite" width="220px"/>
+    <td>
+      <img src="README_file_imgs/SQLite_logo.png" alt="Logo SQLite" width="260px"/>
     </td>
   </tr>
 </table>
@@ -144,11 +144,19 @@ Oba programy totiž spadají pod (dokonce českou) softwarovou společenost
 <a href = "https://www.jetbrains.com/">**JetBrains**</a>,
 která podobných programů provozuje celou řadu.
 
-<div style="display: flex; align-items: center; flex-wrap: wrap;">
-    <img style="margin-left: 200px; margin-bottom: 15px" src="README_file_imgs/Bootstrap_logo.png" alt="Logo Bootstrapu" width="170"/>
-    <img style="margin-left: 200px; margin-bottom: 15px" src="README_file_imgs/PyCharm-logo.png" alt="Logo PyCharmu" width="170"/>
-    <img style="margin-left: 200px; margin-bottom: 15px" src="README_file_imgs/JetBrains_logo.png" alt="Logo JetBrains" width="190"/>
-</div>
+<table>
+  <tr>
+    <td>
+      <img src="README_file_imgs/Bootstrap_logo.png" alt="Logo Bootstrapu" width="170"/>
+    </td>
+    <td>
+      <img src="README_file_imgs/PyCharm-logo.png" alt="Logo PyCharmu" width="170"/>
+    </td>
+    <td>
+      <img src="README_file_imgs/JetBrains_logo.png" alt="Logo JetBrains" width="190"/>
+    </td>
+  </tr>
+</table>
 
 > [!TIP]
 > Pokud jste studentem a máte **ISIC kartu**, tak si můžete v rámci produktů
@@ -192,10 +200,11 @@ spíše takto.
 
 **Ukázka:**
 
-<div style="display: flex; align-items: center;">
-    <img style="margin-left: 25px; margin-bottom: 20px" src="README_file_imgs/comment_PY_script.png" alt="Ukázka komentáře v Pythonu" width="650"/>
-    <img style="margin-left: 25px;" src="README_file_imgs/comment_JS_script.png" alt="Ukázka komentáře v JavaScriptu" width="650"/>
-</div>
+***Python***
+<img src="README_file_imgs/comment_PY_script.png" alt="Ukázka komentáře v Pythonu" width="650"/>
+
+***JavaScript***
+<img src="README_file_imgs/comment_JS_script.png" alt="Ukázka komentáře v JavaScriptu" width="650"/>
 
 ## Jak to celé funguje ?
 
