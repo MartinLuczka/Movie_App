@@ -9,7 +9,7 @@ zbytečné. Nic ovšem nebrání tomu, abyste si mohli aplikaci zprovoznit
 
 **Po zprovoznění stačí následnovat pouze tyto pokyny:**
 
-1. ### Pro zprovoznění webové aplikace musíte mít nainstalovaný python (<u>**3.12 a vyšší**</u>)
+1. ### Pro zprovoznění webové aplikace musíte mít nainstalovaný Python (<u>**3.12 a vyšší**</u>)
 
 Pokud nemáte, tak stiskněte `Win + X` a otevřte si Windows Powershell jako správce
 
@@ -57,6 +57,13 @@ Jak se to dělá: < href="https://www.youtube.com/watch?v=bgSSJQolR0E&t=47s"a>Ot
 *Poznámka: SQLAlchemy by měla být součástí knihovny Flask-SQLAlchemy, ale
 v projektu importujeme z obou, tak si ji (i pro klid v duši) nainstalujte.
 Děkuji.*
+
+> [!CAUTION]
+> Pokud Vám knihovny v aplikaci VS Code nefungují po nainstalování, tak ho zkuste zapnout a vypnout.
+> Samotný jsem to zkoušel zprovozňovat na jiném zařízením a tam to zabralo.
+> 
+> Jinak si **NEZAPOMEŇTE ZKONTROLOVAL VERZI PYTHONU**. V části kódu syntakticky fungují
+> jen verze **3.12 a vyšší**.
 
 4. ### Dále už jen flask aplikaci spustíte a můžete se s mojí stránkou seznámit
 
@@ -201,11 +208,103 @@ spíše takto.
 **Ukázka:**
 
 ***Python***
+<br>
 <img src="README_file_imgs/comment_PY_script.png" alt="Ukázka komentáře v Pythonu" width="650"/>
 
 ***JavaScript***
+<br>
 <img src="README_file_imgs/comment_JS_script.png" alt="Ukázka komentáře v JavaScriptu" width="650"/>
 
 ## Jak to celé funguje ?
+
+### **Python soubory** ve složce ***dbModels***
+
+Tyto Python skripty zavádí tabulky v databázích, můžete si z nich vyčíst, co
+vše se do tabulek ukládá, jaká data představují jaký datový typ, nebo se můžete
+podívat jaké údaje můžou být nenulové či nikoliv.
+
+**Databáze** je určitě jeden z nejzákladnějších kamenů této aplikace a bez
+něj by to nešlo.
+
+### Složka ***pyFiles***
+
+#### dbWrapper.py
+
+Tento soubor obsahuje třídu Dbwrapper, která obsahuje nespočet metod, které
+získávají (třeba na vypsání něčeho na HTML stránku), upravují, mažou či 
+vytvářejí data databáze **database.db**. Tyto funkce voláme zpravidla z hlavního
+souboru **app.py** buď právě při načtení HTML stránky, nebo při splnění 
+určitých podmínek (uživatel okomentoval, ohodnotil, přidal popisek na svém
+profilu atd.)
+
+#### Encoder.py
+
+Zajišťuje funkci, které změní zadané heslo uživatele při přihlášení na
+zakódovanou směs číslic a písmen. Je to hashovací algoritmus 
+**SHA256 (Secure Hash Algorithm)**. Tímto způsobem nezná uživatelovo
+heslo nikdo jiný, než sám uživatel. V databázi je heslo zakódované.
+
+#### GetData.py
+
+Není moc používaný, protože jsem postupně přišel na jiný způsob získávání dat
+z toho, co posílá databáze. I tak je ale na pár místech použit a funguje dobře
+a spolehlivě.
+
+#### UserController.py
+
+Funkce, které řeší přihlášení a odhlášení. V podstatě by mohly být součástí
+třídy Dbwrapper, ale vytvořil jsem je takto jako funkce do samostatného
+Python souboru. Jsou to ale také nějaké dotazi a pokyny pro databázi.
+Při **registraci** je to samozřejmě vytvoření nového záznamu. A při
+**přihlášení** se řeší shoda s již danými údaji při registraci.
+
+### Složka ***static***
+
+#### Složka ***imgs***
+
+Obsahuje obrázky spojené s aplikací. Jedná se o profilové obrázky
+jednotlivých uživatelů a také samozřejmě obrázky, které využívá
+**JavaScript** při zobrazování různých typů hodnocení.
+
+#### Rating.js
+
+**JavaScript, který řeší hodnocení filmu na stránce filmu** pomocí
+hvězdiček. **Dokument sleduje pohyb myši** a "rožíná" a "zhasíná" udávané
+hvězdičky. Při stisknutí zjistí, na jaké hvězdě bylo kliknutí provedeno
+a **pošle data na url adresu**, kterou dále řešíme v **app.py** (data poté
+posíláme do databáze).
+
+#### ReviewRating.js
+
+**JavaScript soubor, který zajišťuje hodnocení recenzí** pomocí palce
+nahoru a palce dolů. Sleduje, jestli je uživatel přihlášen a pokud ano, tak
+si hlídá, jestli někdo palec nahoru nezmáčknul. Pokud ano, tak zjistí jaký
+a hlavně u jaké recenze. Tyto data opět posíláme do **app.py**, které jej poté
+dále zpracovává a posílá na databázi, respektive opět nějaká Dbwrapper
+metoda, která dané informace musí převzat jako parametry. Vybarvené či
+nevybarvené palce nahoru zobrazuje podle proměnné **thumbsRating**, která
+se nastavuje již v **app.py** a je dána daty z databáze. Proměnná je to 
+až v JS, v app.py je to klíč slovníku **review** s názem
+***logedinUsersReviewRating***.
+
+#### SearchBar.js
+
+**JavaScript soubor, který zajišťuje fungování vyhledávače filmů**. SearchBar
+je vlastně input, který se pořád kouká jestli to něj někdo něco zrovna zadává.
+Jestli do něj někdo něco zadá, tak tuto hodnotu posílá přes route do funkce, 
+který získá odpovídající filmy z databáze. Tyto data posílá zpátky do JavaScriptu,
+která z nich dělá za pomocí funkce **dataToList** dělá nečíslovaný seznam,
+který se zobrazuje v HTML.
+
+### Složka ***Templates***
+
+V této složce se nachází všechny HTML soubory. Ve složce ***reusable*** jsou HTML
+soubory, které používáme na každé jiné HTML stránce (máme je tam zahrnuté (**include**)).
+Tímto způsobem je tam nemusíme psát pořád od znovu a ušetříme místo a soubor je
+tím pádem přehlednější.
+
+HTML soubory přímo ve složce ***templates*** jsou unikátní a uživatel si je
+může zobrazit buď přes hlavní nabídku v navigatoru stránky, či skrze různé
+prokliky přes domovskou stránku a stránku filmu.
 
 

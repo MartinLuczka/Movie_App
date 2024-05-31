@@ -45,7 +45,7 @@ $(document).ready(function(){
     for (i = 0; i < data.length; i++) {
         // Pro každou položku v poli `data` provede následující operace
         let film = data[i]
-        // Uloží aktuální z pole `data` do proměnné `film`
+        // Uloží aktuální položku z pole `data` do proměnné `film`
 
         let li = document.createElement('li');
         // Vytvoří nový element <li> (položka seznamu)
