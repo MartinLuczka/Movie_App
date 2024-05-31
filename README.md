@@ -329,7 +329,7 @@ a také své heslo, které musí pro potvrzení zadat znovu stejně jako předt�
 Stránka také vyhazuje zprávu když se zadaná hesla liší, nebo když je 
 uživatelské jméno již zabrané.
 
-<img src="README_file_imgs/sign_up_page.png" alt="Stránka registrace" width="500px"/>
+<img src="README_file_imgs/sign_up_page.png" alt="Stránka registrace" width="1000px"/>
 
 ### Stránka přihlášení
 
@@ -338,7 +338,7 @@ potvrzení přihlášení helsem.
 
 Opět zobrazujeme chybové hlášky: např. **Chybné heslo nebo přihlašovací jméno**.
 
-<img src="README_file_imgs/login_page.png" alt="Stránka přihlášení" width="500px"/>
+<img src="README_file_imgs/login_page.png" alt="Stránka přihlášení" width="1000px"/>
 
 ### Domovská stránka
 
@@ -362,9 +362,9 @@ a název filmu. **Pokud si film rozklikneme, tak nás automaticky přesměruje
 na místo dané recenze na stránce**. Můžeme si samozřejmě rozkliknout i profil
 uživatele.
 
-<img src="README_file_imgs/home_page.png" alt="Domovská stránka" width="500px"/>
+<img src="README_file_imgs/home_page.png" alt="Domovská stránka" width="1000px"/>
 
-## Stránka filmu
+### Stránka filmu
 
 Stránka filmu nám shrnuje základní informace o daném filmu. Máme zde také možnost
 ho ohodnotit a naše hodnocení graficky vidět. Pokud film ještě není ohodnocen,
@@ -381,8 +381,8 @@ Na stránce se také nachází **trailer na film**, ten většinou může být
 spuštěn rovnou ze stránky, někdy je k dispozici **pouze odkaz na stránky
 youtube**.
 
-<img src="README_file_imgs/film_page1.png" alt="Stránka filmu, část 1" width="500px"/>
-<img src="README_file_imgs/film_page2.png" alt="Stránka filmu, část 2" width="500px"/>
+<img src="README_file_imgs/film_page1.png" alt="Stránka filmu, část 1" width="1000px"/>
+<img src="README_file_imgs/film_page2.png" alt="Stránka filmu, část 2" width="1000px"/>
 
 ### Stránka uživatele
 
@@ -404,8 +404,8 @@ Na začátku stránky máme tlačítko, **které nás na stránce přesune rovno
 To se může hodit v případě, když uživatel má mnoho hodnocení a my se nechceme
 uscroolovat.
 
-<img src="README_file_imgs/user_page1.png" alt="Stránka profilu uživatele, část 1" width="500px"/>
-<img src="README_file_imgs/user_page2.png" alt="Stránka profilu uživatele, část 2" width="500px"/>
+<img src="README_file_imgs/user_page1.png" alt="Stránka profilu uživatele, část 1" width="1000px"/>
+<img src="README_file_imgs/user_page2.png" alt="Stránka profilu uživatele, část 2" width="1000px"/>
 
 ### Stránka nastavení profilu uživatele
 
@@ -430,9 +430,33 @@ Tyto změny poté můžeme všechny naráz **poslat potvrzením změn tlačítke
 Profilový obrázek, popisek i nové heslo můžeme nastavit kliknutím na jedno
 tlačítko. **Nemusíme posílat všechno zvlášť na několikrát**.
 
-<img src="README_file_imgs/user_settings.png" alt="Stránka nastavení profilu" width="500px"/>
+<img src="README_file_imgs/user_settings.png" alt="Stránka nastavení profilu" width="600px"/>
 
+## Poděkování
 
+Rád bych poděkoval svému učiteli do Programování **panu Krbcovi**, že ve mně svými
+hodinami a stylem učení vyvolal chuť k programování a také za jeho rychlou
+zpětnou vazbu, co se týče dotazů a připomínek. Dále bych chtěl také poděkovat
+svému bratranci **Standovi**, který mi pomáhal s tvorbou JavaScriptu a také
+mi vysvětloval některé principy pokročilejšího programování v Pythonu."
+
+## Dojmy, nápady, návrhy
+
+Tvorba této webové aplikace mi dala **spoustu nových znalostí** a přiměla mně se
+koukat na programování zase trochu jiným pohledem. Chtěl jsem si vyzkoušet, co
+je vše potřeba znát k vytvoření nějaké funkční aplikace a **tuto zkušenost se
+mi podařilo získat**, za což jsem nesmírně rád.
+
+Měsíc a půl jsem usilovně pracoval na **vytvoření funkční stránky, kterou
+se budu moct být schopný prezentovat** a myslím si, že mi to vyšlo.
+Stránka má vše, co jsem si původně "vysnil", že by mohla umět, to mě
+velice těší.
+
+V případě že byste narazili na chybu, něco Vám nešlo, chtěli byste se na vývoji aplikace 
+nějak podílet, chtěli byste něco vědět, rádi byste zařídili hosting :), 
+tak se mě nebojte kontaktovat na emailové adrese: ***luczka.martin@gmail.com***
+
+**Martin Luczka**
 
 
 
