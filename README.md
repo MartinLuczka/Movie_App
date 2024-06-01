@@ -18,14 +18,18 @@ Abyste jeho instalaci nemuseli pracně instalovat, tak si ho nainstalujeme pomoc
 Do Powershellu zadejte:
 
 ```
-    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 
 Poté nainstalujte jednoduchým příkazem:
 
 ```
-    choco install python
+choco install python
 ```
+
+> [!IMPORTANT]
+> Po nainstalování Pythonu si pro správnou funkci **restartujte** své zařízení. Poté
+> postupujte následujícími kroky.
 
 2. ### Stáhněte si tento projekt jako RAR (nebo si **naklonujte git repozitář**)
 
@@ -43,15 +47,15 @@ Jak se to dělá: <a href="https://www.youtube.com/watch?v=bgSSJQolR0E&t=47s">Ot
 (***pip*** je součástí **Pythonu**)
 
 ```
-  pip install flask
+pip install flask
 ```
 
 ```
-  pip install SQLAlchemy
+pip install SQLAlchemy
 ```
 
 ```
-  pip install Flask-SQLAlchemy
+pip install Flask-SQLAlchemy
 ```
 
 *Poznámka: SQLAlchemy by měla být součástí knihovny Flask-SQLAlchemy, ale
@@ -79,11 +83,16 @@ Děkuji.*
 
 Ve Vašem případě bude s největší pravděpodobností adresa portu vypadat takto: **127.0.0.1:5000**
 
+> [!NOTE]  
+> Aplikace může mít různé rozložení prvků podle displeje zařízení, které používáte.
+> Pokud máte prvky v navigátoru dost přiblížené k sobě, tak si pohrajte s oddálením 
+> stránky pomocí kombinace vstupů `Ctrl + Mouse wheel`.
+
 6. ### Webová aplikace by měla být funkční a vy ji můžete v klidu vyzkoušet
 
 **S případnými problémy se mě nebojte kontaktovat, viz konec README**.
 
-> [!NOTE]
+> [!WARNING]
 > Nespouštějte jen tak Python soubory ve složce ***insertovac***, tu jsem přidal
 > teď na konec mezi posledními commity, aby lidé, které to zajímá, se mohli
 > podívat, jak jsem řešil přidávání dat do databáze. Tyto soubory nejsou
